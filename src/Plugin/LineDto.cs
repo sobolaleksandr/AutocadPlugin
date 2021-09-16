@@ -5,7 +5,7 @@
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
 
-    public class LineDto : Geometry
+    public class LineDto : GeometryViewModel
     {
         private readonly Line _line;
 

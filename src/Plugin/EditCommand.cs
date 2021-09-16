@@ -3,9 +3,11 @@
     using System;
     using System.Windows.Input;
 
-    using Autodesk.AutoCAD.ApplicationServices.Core;
     using Autodesk.AutoCAD.Geometry;
 
+    /// <summary>
+    /// Команда изменения модели примитива.
+    /// </summary>
     public class EditCommand : ICommand
     {
         public bool CanExecute(object parameter)
@@ -37,8 +39,8 @@
                     if (!ApplyChanges(viewData))
                         return;
 
-                    line.StartPoint = ToPoint3d(viewData.Field1);
-                    line.EndPoint = ToPoint3d(viewData.Field2);
+                    line.StartPoint = viewData.Field1.ToPoint3d();
+                    line.EndPoint = viewData.Field2.ToPoint3d();
                     line.Height = double.Parse(viewData.Field3);
                     return;
                 }
@@ -48,19 +50,18 @@
                     if (!ApplyChanges(viewData))
                         return;
 
-                    circle.Center = ToPoint3d(viewData.Field1);
+                    circle.Center = viewData.Field1.ToPoint3d();
                     circle.Radius = double.Parse(viewData.Field2);
                     circle.Height = double.Parse(viewData.Field3);
                     return;
                 }
-                case LayerDto layer:
+                case LayerViewModel layer:
                 {
                     var viewData = layer.EditViewData;
                     if (!ApplyChanges(viewData))
                         return;
 
-                    //var color = byte.Parse(viewData.Field1);
-                    //layer.Color = Color.FromRgb(color, color, color);
+                    layer.ColorModel = viewData.Field1;
                     layer.Name = viewData.Field2;
                     layer.IsLocked = bool.Parse(viewData.Field3);
                     return;
@@ -68,12 +69,11 @@
             }
         }
 
-        private Point3d ToPoint3d(string inputString)
-        {
-            var a = inputString.Trim('(', ')').Split(',');
-            return new Point3d(double.Parse(a[0]), double.Parse(a[1]), double.Parse(a[2]));
-        }
-
+        /// <summary>
+        /// Команда открытия окна редактирования примитива
+        /// </summary>
+        /// <param name="viewData"> Вью-модель редактирования примитива. </param>
+        /// <returns> Возращает true, если пользователь принял изменения. </returns>
         private static bool ApplyChanges(EditViewModel viewData)
         {
             var window = new UserControl2
@@ -81,7 +81,7 @@
                 DataContext = viewData
             };
 
-            return Application.ShowModalWindow(window) == true;
+            return Utilities.ShowDialog(window) == true;
         }
     }
 }

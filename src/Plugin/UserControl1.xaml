@@ -5,44 +5,54 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:acadPlugin="clr-namespace:ACADPlugin"
         mc:Ignorable="d"
-        Title="Window1" Height="500" Width="900"
-        d:DataContext="{d:DesignInstance Type=acadPlugin:LayerDto,  IsDesignTimeCreatable=False }">
-    <StackPanel Orientation="Vertical">
+        Title="Window1" Height="500" Width="871.429">
+    <StackPanel>
         <DataGrid Height="Auto"
                   CanUserAddRows="False"
                   IsReadOnly="True"
                   AutoGenerateColumns="False"
-                  ItemsSource="{Binding Geometries}">
+                  ItemsSource="{Binding Layers}" d:DataContext="{d:DesignInstance acadPlugin:Drawing}">
             <DataGrid.Columns>
-                <DataGridTextColumn Width="Auto" MinWidth="50" Header="Наимеования слоя" Binding="{Binding LayerName}"
-                                    IsReadOnly="True" />
-                <DataGridTextColumn Width="Auto" MinWidth="50" Header="Тип объекта"
-                                    Binding="{Binding Type}" IsReadOnly="True" />
-                   
-                <DataGridTemplateColumn Header="Действие" Width="Auto">
+                <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Width="Auto" MinWidth="50" Name="btnView" Content="Редактировать"
-                                    Command="{Binding EditCommand}"
-                                    CommandParameter="{Binding}" />
+                            <StackPanel Orientation="Vertical"
+                                        d:DataContext="{d:DesignInstance Type=acadPlugin:LayerViewModel,  IsDesignTimeCreatable=False }">
+                                <DataGrid Height="Auto"
+                                          CanUserAddRows="False"
+                                          IsReadOnly="True"
+                                          AutoGenerateColumns="False"
+                                          ItemsSource="{Binding Geometries}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Width="Auto" MinWidth="280" Header="Наимеования слоя"
+                                                            Binding="{Binding LayerName}"
+                                                            IsReadOnly="True" />
+                                        <DataGridTextColumn Width="Auto" MinWidth="280" Header="Тип объекта"
+                                                            Binding="{Binding Type}" IsReadOnly="True" />
+
+                                        <DataGridTemplateColumn Header="Действие" Width="Auto">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <Button Width="Auto" MinWidth="280" Name="btnView"
+                                                            Content="Редактировать"
+                                                            Command="{Binding EditCommand}"
+                                                            CommandParameter="{Binding}" />
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
-            
-                    <!--<DataGridTemplateColumn Header="Действие">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button Width="Auto" MinWidth="290" Name="btnView" Content="Редактировать"
-                                    Command="{Binding EditCommand}"
-                                    CommandParameter="{Binding}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>-->
         </DataGrid>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Height="25" Margin="5" Padding="15,0,15,0" Content="Принять" acadPlugin:DialogResultButton.DialogResult="True" />
-            <Button Height="25" Margin="5" Padding="15,0,15,0" Content="Закрыть" acadPlugin:DialogResultButton.DialogResult="False" />
+            <Button Height="25" Margin="5" Padding="15,0,15,0" Content="Применить изменения"
+                    acadPlugin:DialogResultButton.DialogResult="True" />
+            <Button Height="25" Margin="5" Padding="15,0,15,0" Content="Отменить"
+                    acadPlugin:DialogResultButton.DialogResult="False" />
         </StackPanel>
     </StackPanel>
 </Window>

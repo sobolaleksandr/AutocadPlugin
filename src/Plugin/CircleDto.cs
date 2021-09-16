@@ -5,7 +5,7 @@
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
 
-    public class CircleDto : Geometry
+    public class CircleDto : GeometryViewModel
     {
         private readonly Circle _circle;
 

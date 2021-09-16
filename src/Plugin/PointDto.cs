@@ -5,7 +5,7 @@
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
 
-    public class PointDto : Geometry
+    public class PointDto : GeometryViewModel
     {
         private readonly DBPoint _point;
 
