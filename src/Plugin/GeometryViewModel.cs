@@ -1,5 +1,7 @@
 ﻿namespace ACADPlugin
 {
+    using System.Globalization;
+
     using Autodesk.AutoCAD.DatabaseServices;
 
     /// <summary>
@@ -8,11 +10,15 @@
     public abstract class GeometryViewModel
     {
         /// <summary>
+        /// Высота примитива.
+        /// </summary>
+        protected double _height;
+
+        /// <summary>
         /// Базовый класс примитива.
         /// </summary>
         protected GeometryViewModel()
         {
-            Height = 2d;
             EditCommand = new EditCommand();
         }
 
@@ -29,7 +35,17 @@
         /// <summary>
         /// Высота примитива.
         /// </summary>
-        public double Height { get; set; }
+        public string Height
+        {
+            get => _height.ToString(CultureInfo.InvariantCulture);
+            set
+            {
+                if (!double.TryParse(value, out var height))
+                    return;
+
+                _height = height;
+            }
+        }
 
         /// <summary>
         /// Id-слоя.

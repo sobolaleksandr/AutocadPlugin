@@ -4,7 +4,6 @@
     using System.Linq;
     using System.Windows;
 
-    using Autodesk.AutoCAD.ApplicationServices;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Runtime;
 
@@ -45,27 +44,17 @@
                     var layers = CreateLayerModels(transaction, database);
                     foreach (var objectId in objectIds)
                     {
-                        var dbObject = transaction.GetObject(objectId, OpenMode.ForWrite, true, true) as Entity;
+                        var dbObject = transaction.GetObject(objectId, OpenMode.ForWrite, true, true);
                         var geometry = CreateGeometry(dbObject);
-                        var layer = layers.FirstOrDefault(l => l.Id == geometry.LayerId);
+                        var layer = layers.FirstOrDefault(l => l.Id == geometry?.LayerId);
                         layer?.Geometries.Add(geometry);
                     }
 
-                    var test = layers.Where(l => l.Geometries.Count > 1).ToList();
-                    foreach (var layerDto in test)
+                    var nonEmptyLayers = layers.Where(l => l.Geometries.Count > 1).ToList();
+                    var drawing = new Drawing(nonEmptyLayers);
+                    var window = new LayersWindow
                     {
-                        layerDto.AssignLayerName();
-                    }
-
-                    test.Add(new LayerViewModel());
-                    var layersDtos = new Drawing
-                    {
-                        Layers = test
-                    };
-
-                    var window = new UserControl1
-                    {
-                        DataContext = layersDtos
+                        DataContext = drawing
                     };
 
                     if (Utilities.ShowDialog(window) == true)
@@ -88,11 +77,11 @@
             switch (dbObject)
             {
                 case DBPoint point:
-                    return new PointDto(point);
+                    return new PointViewModel(point);
                 case Line line:
-                    return new LineDto(line);
+                    return new LineViewModel(line);
                 case Circle circle:
-                    return new CircleDto(circle);
+                    return new CircleViewModel(circle);
                 default:
                     return null;
             }
@@ -107,15 +96,17 @@
         private static List<LayerViewModel> CreateLayerModels(Transaction transaction, Database database)
         {
             var layers = new List<LayerViewModel>();
-            var symbolTable = (SymbolTable)transaction.GetObject(database.LayerTableId, OpenMode.ForRead);
-            foreach (var objectId in symbolTable)
+            var layerTable = (LayerTable)transaction.GetObject(database.LayerTableId, OpenMode.ForRead);
+            var layerIds = layerTable.OfType<ObjectId>().ToList();
+            foreach (var layerId in layerIds)
             {
                 try
                 {
-                    var layerTableRecord = (LayerTableRecord)transaction.GetObject(objectId, OpenMode.ForRead);
+                    var layerTableRecord = (LayerTableRecord)transaction.GetObject(layerId, OpenMode.ForWrite);
+                    layerTableRecord.IsLocked = false;
                     layers.Add(new LayerViewModel(layerTableRecord));
                 }
-                catch
+                catch (Exception)
                 {
                     // Когда-то были обнаружены случаи, что нельзя было разлочить слой Но сделанная раннее проверка не являлась верной. Её пришлось убрать.
                     // Чтобы избежать возможных ошибок, добавлен try-catch с пустой обработкой.

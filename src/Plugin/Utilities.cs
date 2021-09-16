@@ -7,29 +7,20 @@
 
     using Application = Autodesk.AutoCAD.ApplicationServices.Core.Application;
 
+    /// <summary>
+    /// Различные утилиты.
+    /// </summary>
     public static class Utilities
     {
         /// <summary>
-        /// Получение цвета по индексу.
-        /// </summary>
-        /// <param name="colorIndex">Индекс цвета.</param>
-        /// <returns>Цвет по индексу.</returns>
-        public static Color GetColor(short colorIndex)
-        {
-            return colorIndex == 500
-                ? Color.FromRgb(255, 255, 255)
-                : Color.FromColorIndex(ColorMethod.ByAci, colorIndex);
-        }
-
-        /// <summary>
         /// Установка цвета для сущности AutoCAD.
         /// </summary>
-        /// <param name="entity">Объект чертежа.</param>
-        /// <param name="colorModel">Цвет в формате CADGIS.</param>
-        public static void SetColor(this Entity entity, ColorModel colorModel)
+        /// <param name="layer">Объект чертежа.</param>
+        /// <param name="color">Цвет в формате CADGIS.</param>
+        public static void SetColor(this LayerTableRecord layer, ColorModel color)
         {
-            if (colorModel != null)
-                entity.Color = Color.FromRgb(colorModel.R, colorModel.G, colorModel.B);
+            if (color != null)
+                layer.Color = Color.FromRgb(color.R, color.G, color.B);
         }
 
         /// <summary>

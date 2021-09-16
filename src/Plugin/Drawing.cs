@@ -8,8 +8,21 @@
     public class Drawing
     {
         /// <summary>
+        /// Модель чертежа.
+        /// </summary>
+        public Drawing(List<LayerViewModel> layers)
+        {
+            foreach (var layerDto in layers)
+            {
+                layerDto.AssignLayerName();
+            }
+
+            Layers = layers;
+        }
+
+        /// <summary>
         /// Слои, содержащие объекты.
         /// </summary>
-        public List<LayerViewModel> Layers { get; set; }
+        public List<LayerViewModel> Layers { get; }
     }
 }

@@ -32,7 +32,7 @@
         /// <param name="database">База чертежа.</param>
         /// <param name="transaction">Транзакция.</param>
         /// <returns>Возвращает список идентификаторов чертежа.</returns>
-        public static List<ObjectId> GetAllEntities(this Database database, Transaction transaction)
+        private static List<ObjectId> GetAllEntities(this Database database, Transaction transaction)
         {
             var btr = database.GetModelSpaceBtr(transaction, OpenMode.ForRead);
             return btr.Cast<ObjectId>().ToList();
@@ -45,7 +45,7 @@
         /// <param name="transaction">Транзакция чертежа.</param>
         /// <param name="openMode">Режим доступа.</param>
         /// <returns>Возвращает запись таблицы блоков пространства чертежа.</returns>
-        public static BlockTableRecord GetModelSpaceBtr(this Database database, Transaction transaction,
+        private static BlockTableRecord GetModelSpaceBtr(this Database database, Transaction transaction,
             OpenMode openMode)
         {
             var bt = (BlockTable)transaction.GetObject(database.BlockTableId, OpenMode.ForRead);
@@ -57,7 +57,7 @@
         /// </summary>
         /// <param name="database">База чертежа.</param>
         /// <returns>Возвращает созданную транзакцию.</returns>
-        public static Transaction StartTransaction(this Database database)
+        private static Transaction StartTransaction(this Database database)
         {
             return database.TransactionManager.StartTransaction();
         }

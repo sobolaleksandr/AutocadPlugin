@@ -1,5 +1,6 @@
 ﻿namespace ACADPlugin
 {
+    using System;
     using System.Collections.Generic;
     using System.Globalization;
 
@@ -28,16 +29,12 @@
             EditViewData = new EditViewModel
             {
                 Field1 = ColorModel,
-                Field2 = Name.ToString(CultureInfo.InvariantCulture),
-                Field3 = IsLocked.ToString(CultureInfo.InvariantCulture),
+                Field2 = Name,
+                Field3 = Transparency.ToString(CultureInfo.InvariantCulture),
                 Label1 = "Цвет",
                 Label2 = "Название",
                 Label3 = "Видимость",
             };
-        }
-
-        public LayerViewModel()
-        {
         }
 
         /// <summary>
@@ -54,7 +51,7 @@
             set
             {
                 var color = ACADPlugin.ColorModel.TryParse(value);
-                _layer.Color = Color.FromRgb(color.R, color.G, color.B);
+                _layer.SetColor(color);
             }
         }
 
@@ -69,21 +66,37 @@
         public ObjectId Id => _layer.Id;
 
         /// <summary>
-        /// Видимость слоя.
+        /// Проверка на нулевой слой.
         /// </summary>
-        public bool IsLocked
-        {
-            get => _layer.IsLocked;
-            set => _layer.IsLocked = value;
-        }
+        private bool IsEditable => !Name.Equals("0", StringComparison.CurrentCultureIgnoreCase);
 
         /// <summary>
         /// Наименования слоя
         /// </summary>
         public string Name
         {
-            get => _layer.Name;
-            set => _layer.Name = value;
+            get => _layer.Name.ToString(CultureInfo.InvariantCulture);
+            set
+            {
+                if (IsEditable)
+                    _layer.Name = value.ToString(CultureInfo.InvariantCulture);
+            }
+        }
+
+        /// <summary>
+        /// Видимость слоя.
+        /// </summary>
+        public string Transparency
+        {
+            get => _layer.Transparency.ToString();
+            set
+            {
+                if (!byte.TryParse(value, out var transparency))
+                    return;
+
+                var alpha = (byte)(255 * (100 - transparency) / 100);
+                _layer.Transparency = new Transparency(alpha);
+            }
         }
 
         /// <summary>
@@ -97,7 +110,6 @@
             }
         }
 
-        
         protected override string GetTypeName()
         {
             return "Слой";

@@ -12,58 +12,53 @@
     {
         public bool CanExecute(object parameter)
         {
-            return true;
+            return true; // Оставил такую реализацию
         }
 
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler CanExecuteChanged; // Не использовал
 
+        /// <summary>
+        /// Изменение модели примитива.
+        /// </summary>
+        /// <param name="parameter"> Вызывающий примитив. </param>
         public void Execute(object parameter)
         {
-            switch (parameter)
-            {
-                case PointDto point:
-                {
-                    var viewData = point.EditViewData;
-                    if (!ApplyChanges(viewData))
-                        return;
+            if (!(parameter is GeometryViewModel geometry))
+                return;
 
+            var viewData = geometry.EditViewData;
+            if (!ApplyChanges(viewData))
+                return;
+
+            switch (geometry)
+            {
+                case PointViewModel point:
+                {
                     var x = double.Parse(viewData.Field1);
                     var y = double.Parse(viewData.Field2);
                     var z = double.Parse(viewData.Field3);
                     point.Position = new Point3d(x, y, z);
                     return;
                 }
-                case LineDto line:
+                case LineViewModel line:
                 {
-                    var viewData = line.EditViewData;
-                    if (!ApplyChanges(viewData))
-                        return;
-
-                    line.StartPoint = viewData.Field1.ToPoint3d();
-                    line.EndPoint = viewData.Field2.ToPoint3d();
-                    line.Height = double.Parse(viewData.Field3);
+                    line.StartPoint = viewData.Field1;
+                    line.EndPoint = viewData.Field2;
+                    line.Height = viewData.Field3;
                     return;
                 }
-                case CircleDto circle:
+                case CircleViewModel circle:
                 {
-                    var viewData = circle.EditViewData;
-                    if (!ApplyChanges(viewData))
-                        return;
-
-                    circle.Center = viewData.Field1.ToPoint3d();
-                    circle.Radius = double.Parse(viewData.Field2);
-                    circle.Height = double.Parse(viewData.Field3);
+                    circle.Center = viewData.Field1;
+                    circle.Radius = viewData.Field2;
+                    circle.Height = viewData.Field3;
                     return;
                 }
                 case LayerViewModel layer:
                 {
-                    var viewData = layer.EditViewData;
-                    if (!ApplyChanges(viewData))
-                        return;
-
                     layer.ColorModel = viewData.Field1;
                     layer.Name = viewData.Field2;
-                    layer.IsLocked = bool.Parse(viewData.Field3);
+                    layer.Transparency = viewData.Field3;
                     return;
                 }
             }
@@ -76,7 +71,7 @@
         /// <returns> Возращает true, если пользователь принял изменения. </returns>
         private static bool ApplyChanges(EditViewModel viewData)
         {
-            var window = new UserControl2
+            var window = new EditWindow
             {
                 DataContext = viewData
             };
