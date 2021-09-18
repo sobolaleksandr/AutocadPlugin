@@ -28,9 +28,9 @@
             LayerName = layer.Name;
             EditViewData = new EditViewModel
             {
-                Field1 = ColorModel,
+                Field1 = Color,
                 Field2 = Name,
-                Field3 = Transparency.ToString(CultureInfo.InvariantCulture),
+                Field3 = IsOff,
                 Label1 = "Цвет",
                 Label2 = "Название",
                 Label3 = "Видимость",
@@ -40,18 +40,19 @@
         /// <summary>
         /// Цвет слоя.
         /// </summary>
-        public string ColorModel
+        public string Color
         {
             get
             {
-                var color = _layer.Color;
-                var colorModel = new ColorModel(color.Red, color.Green, color.Blue);
-                return colorModel.ToString();
+                var color = _layer.EntityColor.ColorIndex;
+                return color.ToString(CultureInfo.InvariantCulture);
             }
             set
             {
-                var color = ACADPlugin.ColorModel.TryParse(value);
-                _layer.SetColor(color);
+                if (!short.TryParse(value, out var color))
+                    return;
+
+                _layer.Color = Autodesk.AutoCAD.Colors.Color.FromColorIndex(ColorMethod.ByAci, color);
             }
         }
 
@@ -86,16 +87,19 @@
         /// <summary>
         /// Видимость слоя.
         /// </summary>
-        public string Transparency
+        public string IsOff
         {
-            get => _layer.Transparency.ToString();
+            get
+            {
+                var isOff = !_layer.IsOff;
+                return isOff.ToString(CultureInfo.InvariantCulture);
+            }
             set
             {
-                if (!byte.TryParse(value, out var transparency))
+                if (!bool.TryParse(value, out var isOff))
                     return;
 
-                var alpha = (byte)(255 * (100 - transparency) / 100);
-                _layer.Transparency = new Transparency(alpha);
+                _layer.IsOff = !isOff;
             }
         }
 

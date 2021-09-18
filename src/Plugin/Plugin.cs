@@ -42,16 +42,7 @@
                 using (var transaction = document.StartTransaction())
                 {
                     var layers = CreateLayerModels(transaction, database);
-                    foreach (var objectId in objectIds)
-                    {
-                        var dbObject = transaction.GetObject(objectId, OpenMode.ForWrite, true, true);
-                        var geometry = CreateGeometry(dbObject);
-                        var layer = layers.FirstOrDefault(l => l.Id == geometry?.LayerId);
-                        layer?.Geometries.Add(geometry);
-                    }
-
-                    var nonEmptyLayers = layers.Where(l => l.Geometries.Count > 1).ToList();
-                    var drawing = new Drawing(nonEmptyLayers);
+                    var drawing = CreateDrawing(objectIds, transaction, layers);
                     var window = new LayersWindow
                     {
                         DataContext = drawing
@@ -65,6 +56,20 @@
             {
                 MessageBox.Show(exception.ToString());
             }
+        }
+
+        private static Drawing CreateDrawing(IEnumerable<ObjectId> objectIds, Transaction transaction, IReadOnlyCollection<LayerViewModel> layers)
+        {
+            foreach (var objectId in objectIds)
+            {
+                var dbObject = transaction.GetObject(objectId, OpenMode.ForWrite, true, true);
+                var geometry = CreateGeometry(dbObject);
+                var layer = layers.FirstOrDefault(l => l.Id == geometry?.LayerId);
+                layer?.Geometries.Add(geometry);
+            }
+
+            var nonEmptyLayers = layers.Where(l => l.Geometries.Count > 1).ToList();
+            return new Drawing(nonEmptyLayers);
         }
 
         /// <summary>

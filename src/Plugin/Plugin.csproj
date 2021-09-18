@@ -110,7 +110,6 @@
   <ItemGroup>
     <Compile Include="CircleViewModel.cs" />
     <Compile Include="Utilities.cs" />
-    <Compile Include="ColorModel.cs" />
     <Compile Include="DialogResultButton.cs" />
     <Compile Include="DialogViewModelBase.cs" />
     <Compile Include="EditCommand.cs" />

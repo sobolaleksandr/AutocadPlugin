@@ -56,9 +56,9 @@
                 }
                 case LayerViewModel layer:
                 {
-                    layer.ColorModel = viewData.Field1;
+                    layer.Color = viewData.Field1;
                     layer.Name = viewData.Field2;
-                    layer.Transparency = viewData.Field3;
+                    layer.IsOff = viewData.Field3;
                     return;
                 }
             }
