@@ -72,19 +72,6 @@
         private bool IsEditable => !Name.Equals("0", StringComparison.CurrentCultureIgnoreCase);
 
         /// <summary>
-        /// Наименования слоя
-        /// </summary>
-        public string Name
-        {
-            get => _layer.Name.ToString(CultureInfo.InvariantCulture);
-            set
-            {
-                if (IsEditable)
-                    _layer.Name = value.ToString(CultureInfo.InvariantCulture);
-            }
-        }
-
-        /// <summary>
         /// Видимость слоя.
         /// </summary>
         public string IsOff
@@ -100,6 +87,19 @@
                     return;
 
                 _layer.IsOff = !isOff;
+            }
+        }
+
+        /// <summary>
+        /// Наименование слоя
+        /// </summary>
+        public string Name
+        {
+            get => _layer.Name.ToString(CultureInfo.InvariantCulture);
+            set
+            {
+                if (IsEditable)
+                    _layer.Name = value.ToString(CultureInfo.InvariantCulture);
             }
         }
 

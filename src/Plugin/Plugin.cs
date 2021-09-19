@@ -39,6 +39,8 @@
                 var document = Application.DocumentManager.MdiActiveDocument;
                 var database = document.Database;
                 var objectIds = database.GetAllEntities();
+
+                using (document.LockDocument())
                 using (var transaction = document.StartTransaction())
                 {
                     var layers = CreateLayerModels(transaction, database);
@@ -58,7 +60,15 @@
             }
         }
 
-        private static Drawing CreateDrawing(IEnumerable<ObjectId> objectIds, Transaction transaction, IReadOnlyCollection<LayerViewModel> layers)
+        /// <summary>
+        /// Функция создания объекта чертежа. 
+        /// </summary>
+        /// <param name="objectIds"> Id-объектов на чертеже. </param>
+        /// <param name="transaction"> Транзакция. </param>
+        /// <param name="layers"> Список слоев, на которые необходимо добавить объекты. </param>
+        /// <returns> Возращает чертеж со слоями с соответствующии объектами. </returns>
+        private static Drawing CreateDrawing(IEnumerable<ObjectId> objectIds, Transaction transaction,
+            IReadOnlyCollection<LayerViewModel> layers)
         {
             foreach (var objectId in objectIds)
             {
@@ -68,7 +78,9 @@
                 layer?.Geometries.Add(geometry);
             }
 
+            // Больше одного т.к. мы добавляем первым объектом сам слой в коллекцию объектов
             var nonEmptyLayers = layers.Where(l => l.Geometries.Count > 1).ToList();
+
             return new Drawing(nonEmptyLayers);
         }
 
