@@ -18,6 +18,7 @@
         /// <summary>
         /// Вью-модель точки.
         /// </summary>
+        /// <param name="point"> Точка. </param>
         public PointViewModel(DBPoint point)
         {
             _point = point;

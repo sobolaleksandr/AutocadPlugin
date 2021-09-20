@@ -17,6 +17,7 @@
         /// <summary>
         /// Вью-модель окружности.
         /// </summary>
+        /// <param name="circle"> Окружность. </param>
         public CircleViewModel(Circle circle)
         {
             _circle = circle;

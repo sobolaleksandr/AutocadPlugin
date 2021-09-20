@@ -18,6 +18,7 @@
         /// <summary>
         /// Вью-модель отрезка.
         /// </summary>
+        /// <param name="line"> Отрезок. </param>
         public LineViewModel(Line line)
         {
             _line = line;
