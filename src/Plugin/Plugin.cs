@@ -4,6 +4,11 @@
     using System.Linq;
     using System.Windows;
 
+    using ACADPlugin.Extensions;
+    using ACADPlugin.Model;
+    using ACADPlugin.Utilities;
+    using ACADPlugin.View;
+
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Runtime;
 
@@ -45,13 +50,20 @@
                 {
                     var layers = CreateLayerModels(transaction, database);
                     var drawing = CreateDrawing(objectIds, transaction, layers);
-                    var window = new LayersWindow
+                    var window = new LayersView
                     {
                         DataContext = drawing
                     };
 
-                    if (Utilities.ShowDialog(window) == true)
+                    if (DialogUtilities.ShowDialog(window) == true)
                         transaction.Commit();
+
+                    //Блокируем все слои.
+                    var layerIds = GetLayerIds(transaction, database);
+                    foreach (var layerId in layerIds)
+                    {
+                        LockLayer(transaction, true, layerId);
+                    }
                 }
             }
             catch (Exception exception)
@@ -67,8 +79,8 @@
         /// <param name="transaction"> Транзакция. </param>
         /// <param name="layers"> Список слоев, на которые необходимо добавить объекты. </param>
         /// <returns> Возращает чертеж со слоями с соответствующии объектами. </returns>
-        private static Drawing CreateDrawing(IEnumerable<ObjectId> objectIds, Transaction transaction,
-            IReadOnlyCollection<LayerViewModel> layers)
+        private static DrawingModel CreateDrawing(IEnumerable<ObjectId> objectIds, Transaction transaction,
+            List<LayerModel> layers)
         {
             foreach (var objectId in objectIds)
             {
@@ -79,49 +91,47 @@
             }
 
             // Больше одного т.к. мы добавляем первым объектом сам слой в коллекцию объектов
-            var nonEmptyLayers = layers.Where(l => l.Geometries.Count > 1).ToList();
+            //var nonEmptyLayers = layers.Where(l => l.Geometries.Count > 1).ToList();
 
-            return new Drawing(nonEmptyLayers);
+            return new DrawingModel(layers);
         }
 
         /// <summary>
         /// Функция создания моделей примитивов.
         /// </summary>
         /// <param name="dbObject"> Объект чертежа. </param>
-        /// <returns> Возвращает модель примитива, приведенную к базовому классу <see cref="GeometryViewModel"/></returns>
-        private static GeometryViewModel CreateGeometry(DBObject dbObject)
+        /// <returns> Возвращает модель примитива, приведенную к базовому классу <see cref="GeometryModel"/></returns>
+        private static GeometryModel CreateGeometry(DBObject dbObject)
         {
             switch (dbObject)
             {
                 case DBPoint point:
-                    return new PointViewModel(point);
+                    return new PointModel(point);
                 case Line line:
-                    return new LineViewModel(line);
+                    return new LineModel(line);
                 case Circle circle:
-                    return new CircleViewModel(circle);
+                    return new CircleModel(circle);
                 default:
                     return null;
             }
         }
 
         /// <summary>
-        /// Создать вью-модель для каждого слоя.
+        /// Создать модели для каждого слоя.
         /// </summary>
         /// <param name="transaction"> Транзация. </param>
         /// <param name="database"> База данных. </param>
         /// <returns> Возвращает коллекцию моделей. </returns>
-        private static List<LayerViewModel> CreateLayerModels(Transaction transaction, Database database)
+        private static List<LayerModel> CreateLayerModels(Transaction transaction, Database database)
         {
-            var layers = new List<LayerViewModel>();
-            var layerTable = (LayerTable)transaction.GetObject(database.LayerTableId, OpenMode.ForRead);
-            var layerIds = layerTable.OfType<ObjectId>().ToList();
+            var layers = new List<LayerModel>();
+            var layerIds = GetLayerIds(transaction, database);
             foreach (var layerId in layerIds)
             {
                 try
                 {
-                    var layerTableRecord = (LayerTableRecord)transaction.GetObject(layerId, OpenMode.ForWrite);
-                    layerTableRecord.IsLocked = false;
-                    layers.Add(new LayerViewModel(layerTableRecord));
+                    var layerTableRecord = LockLayer(transaction, false, layerId);
+                    layers.Add(new LayerModel(layerTableRecord));
                 }
                 catch (Exception)
                 {
@@ -131,6 +141,32 @@
             }
 
             return layers;
+        }
+
+        /// <summary>
+        /// Блокировать/разблокировать слой.
+        /// </summary>
+        /// <param name="transaction"> Транзакция. </param>
+        /// <param name="isLocked"> Заблокировать/разблокировать слой. </param>
+        /// <param name="layerId"> Id-слоя. </param>
+        /// <returns> Возвращает заблокированный/разблокированный слой. </returns>
+        private static LayerTableRecord LockLayer(Transaction transaction, bool isLocked, ObjectId layerId)
+        {
+            var layerTableRecord = (LayerTableRecord)transaction.GetObject(layerId, OpenMode.ForWrite);
+            layerTableRecord.IsLocked = isLocked;
+            return layerTableRecord;
+        }
+
+        /// <summary>
+        /// Получить Id-слоев с чертежа.
+        /// </summary>
+        /// <param name="transaction"> Транзакция. </param>
+        /// <param name="database"> База данных чертежа. </param>
+        /// <returns> Возвращает список Id-слоев. </returns>
+        private static List<ObjectId> GetLayerIds(Transaction transaction, Database database)
+        {
+            var layerTable = (LayerTable)transaction.GetObject(database.LayerTableId, OpenMode.ForRead);
+            return layerTable.OfType<ObjectId>().ToList();
         }
     }
 }

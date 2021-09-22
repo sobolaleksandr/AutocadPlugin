@@ -1,4 +1,4 @@
-﻿namespace ACADPlugin
+﻿namespace ACADPlugin.Utilities
 {
     using System.Windows;
 
@@ -7,7 +7,7 @@
     /// <summary>
     /// Различные утилиты.
     /// </summary>
-    public static class Utilities
+    public static class DialogUtilities
     {
         /// <summary>
         /// Открыть диалоговое окно под управлением приложения AutoCAD, если у окна не указан иной хозяин.

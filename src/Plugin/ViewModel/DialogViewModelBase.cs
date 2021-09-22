@@ -1,4 +1,4 @@
-﻿namespace ACADPlugin
+﻿namespace ACADPlugin.ViewModel
 {
     /// <summary>
     /// Базовая вью-модель с результатом диалога.

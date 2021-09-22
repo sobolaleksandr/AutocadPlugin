@@ -1,14 +1,17 @@
-﻿namespace ACADPlugin
+﻿namespace ACADPlugin.Model
 {
     using System;
     using System.Globalization;
 
+    using ACADPlugin.Utilities;
+    using ACADPlugin.ViewModel;
+
     using Autodesk.AutoCAD.DatabaseServices;
 
     /// <summary>
-    /// Вью-модель отрезка.
+    /// Модель отрезка.
     /// </summary>
-    public class LineViewModel : GeometryViewModel
+    public class LineModel : GeometryModel
     {
         /// <summary>
         /// Ссылка на объект чертежа.
@@ -16,10 +19,10 @@
         private readonly Line _line;
 
         /// <summary>
-        /// Вью-модель отрезка.
+        /// Модель отрезка.
         /// </summary>
         /// <param name="line"> Отрезок. </param>
-        public LineViewModel(Line line)
+        public LineModel(Line line)
         {
             _line = line;
             LayerId = line.LayerId;

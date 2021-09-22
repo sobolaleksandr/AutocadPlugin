@@ -1,4 +1,4 @@
-﻿namespace ACADPlugin
+﻿namespace ACADPlugin.Utilities
 {
     using Autodesk.AutoCAD.Geometry;
 

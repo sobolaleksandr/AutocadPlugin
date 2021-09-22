@@ -1,8 +1,10 @@
-﻿namespace ACADPlugin
+﻿namespace ACADPlugin.Model
 {
     using System;
     using System.Collections.Generic;
     using System.Globalization;
+
+    using ACADPlugin.ViewModel;
 
     using Autodesk.AutoCAD.Colors;
     using Autodesk.AutoCAD.DatabaseServices;
@@ -10,7 +12,7 @@
     /// <summary>
     /// Модель слоя.
     /// </summary>
-    public class LayerViewModel : GeometryViewModel
+    public class LayerModel : GeometryModel
     {
         /// <summary>
         /// Ссылка на объект чертежа.
@@ -21,10 +23,10 @@
         /// Модель слоя.
         /// </summary>
         /// <param name="layer"> Слой. </param>
-        public LayerViewModel(LayerTableRecord layer)
+        public LayerModel(LayerTableRecord layer)
         {
             _layer = layer;
-            Geometries = new List<GeometryViewModel> { this };
+            Geometries = new List<GeometryModel> { this };
             LayerName = layer.Name;
             EditViewData = new EditViewModel
             {
@@ -59,7 +61,7 @@
         /// <summary>
         /// Примитивы в слое.
         /// </summary>
-        public List<GeometryViewModel> Geometries { get; }
+        public List<GeometryModel> Geometries { get; }
 
         /// <summary>
         /// Идентификатор слоя.

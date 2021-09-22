@@ -1,4 +1,4 @@
-﻿namespace ACADPlugin
+﻿namespace ACADPlugin.Extensions
 {
     using Autodesk.AutoCAD.ApplicationServices;
     using Autodesk.AutoCAD.DatabaseServices;

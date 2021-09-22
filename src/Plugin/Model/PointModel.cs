@@ -1,14 +1,16 @@
-﻿namespace ACADPlugin
+﻿namespace ACADPlugin.Model
 {
     using System.Globalization;
+
+    using ACADPlugin.ViewModel;
 
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
 
     /// <summary>
-    /// Вью-модель точки.
+    /// Модель точки.
     /// </summary>
-    public class PointViewModel : GeometryViewModel
+    public class PointModel : GeometryModel
     {
         /// <summary>
         /// Ссылка на объект чертежа.
@@ -16,10 +18,10 @@
         private readonly DBPoint _point;
 
         /// <summary>
-        /// Вью-модель точки.
+        /// Модель точки.
         /// </summary>
         /// <param name="point"> Точка. </param>
-        public PointViewModel(DBPoint point)
+        public PointModel(DBPoint point)
         {
             _point = point;
             Position = point.Position;

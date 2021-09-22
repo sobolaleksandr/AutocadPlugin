@@ -1,9 +1,11 @@
-﻿namespace ACADPlugin
+﻿namespace ACADPlugin.View
 {
     using System;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Interop;
+
+    using ACADPlugin.ViewModel;
 
     /// <summary>
     /// Класс, позволяющий навешивать на кнопку возможность задания "DialogResult".

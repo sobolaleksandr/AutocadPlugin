@@ -1,13 +1,16 @@
-﻿namespace ACADPlugin
+﻿namespace ACADPlugin.Model
 {
     using System.Globalization;
+
+    using ACADPlugin.Command;
+    using ACADPlugin.ViewModel;
 
     using Autodesk.AutoCAD.DatabaseServices;
 
     /// <summary>
     /// Базовый класс примитива.
     /// </summary>
-    public abstract class GeometryViewModel
+    public abstract class GeometryModel
     {
         /// <summary>
         /// Высота примитива.
@@ -17,7 +20,7 @@
         /// <summary>
         /// Базовый класс примитива.
         /// </summary>
-        protected GeometryViewModel()
+        protected GeometryModel()
         {
             EditCommand = new EditCommand();
         }

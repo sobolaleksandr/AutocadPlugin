@@ -1,14 +1,14 @@
-﻿namespace ACADPlugin
+﻿namespace ACADPlugin.View
 {
     /// <summary>
     /// Окно просмотра слоёв.
     /// </summary>
-    public partial class LayersWindow
+    public partial class LayersView
     {
         /// <summary>
         /// Окно просмотра слоёв.
         /// </summary>
-        public LayersWindow()
+        public LayersView()
         {
             InitializeComponent();
         }

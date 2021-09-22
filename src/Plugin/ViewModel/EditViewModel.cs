@@ -1,4 +1,4 @@
-﻿namespace ACADPlugin
+﻿namespace ACADPlugin.ViewModel
 {
     /// <summary>
     /// Вью модель редактирования примитива.

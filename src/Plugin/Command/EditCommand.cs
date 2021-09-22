@@ -1,7 +1,12 @@
-﻿namespace ACADPlugin
+﻿namespace ACADPlugin.Command
 {
     using System;
     using System.Windows.Input;
+
+    using ACADPlugin.Model;
+    using ACADPlugin.Utilities;
+    using ACADPlugin.View;
+    using ACADPlugin.ViewModel;
 
     using Autodesk.AutoCAD.Geometry;
 
@@ -23,7 +28,7 @@
         /// <param name="parameter"> Вызывающий примитив. </param>
         public void Execute(object parameter)
         {
-            if (!(parameter is GeometryViewModel geometry))
+            if (!(parameter is GeometryModel geometry))
                 return;
 
             var viewData = geometry.EditViewData;
@@ -32,7 +37,7 @@
 
             switch (geometry)
             {
-                case PointViewModel point:
+                case PointModel point:
                 {
                     var x = double.Parse(viewData.Field1);
                     var y = double.Parse(viewData.Field2);
@@ -40,21 +45,21 @@
                     point.Position = new Point3d(x, y, z);
                     return;
                 }
-                case LineViewModel line:
+                case LineModel line:
                 {
                     line.StartPoint = viewData.Field1;
                     line.EndPoint = viewData.Field2;
                     line.Height = viewData.Field3;
                     return;
                 }
-                case CircleViewModel circle:
+                case CircleModel circle:
                 {
                     circle.Center = viewData.Field1;
                     circle.Radius = viewData.Field2;
                     circle.Height = viewData.Field3;
                     return;
                 }
-                case LayerViewModel layer:
+                case LayerModel layer:
                 {
                     layer.Color = viewData.Field1;
                     layer.Name = viewData.Field2;
@@ -71,12 +76,12 @@
         /// <returns> Возращает true, если пользователь принял изменения. </returns>
         private static bool ApplyChanges(EditViewModel viewData)
         {
-            var window = new EditWindow
+            var window = new EditView
             {
                 DataContext = viewData
             };
 
-            return Utilities.ShowDialog(window) == true;
+            return DialogUtilities.ShowDialog(window) == true;
         }
     }
 }

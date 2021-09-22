@@ -1,4 +1,4 @@
-﻿namespace ACADPlugin
+﻿namespace ACADPlugin.ViewModel
 {
     using System.ComponentModel;
     using System.Runtime.CompilerServices;

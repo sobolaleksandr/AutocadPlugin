@@ -1,13 +1,16 @@
-﻿namespace ACADPlugin
+﻿namespace ACADPlugin.Model
 {
     using System.Globalization;
+
+    using ACADPlugin.Utilities;
+    using ACADPlugin.ViewModel;
 
     using Autodesk.AutoCAD.DatabaseServices;
 
     /// <summary>
-    /// Вью-модель окружности.
+    /// Модель окружности.
     /// </summary>
-    public class CircleViewModel : GeometryViewModel
+    public class CircleModel : GeometryModel
     {
         /// <summary>
         /// Ссылка на объект чертежа.
@@ -15,10 +18,10 @@
         private readonly Circle _circle;
 
         /// <summary>
-        /// Вью-модель окружности.
+        /// Модель окружности.
         /// </summary>
         /// <param name="circle"> Окружность. </param>
-        public CircleViewModel(Circle circle)
+        public CircleModel(Circle circle)
         {
             _circle = circle;
             LayerId = circle.LayerId;

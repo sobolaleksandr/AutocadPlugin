@@ -1,16 +1,16 @@
-﻿namespace ACADPlugin
+﻿namespace ACADPlugin.Model
 {
     using System.Collections.Generic;
 
     /// <summary>
     /// Модель чертежа.
     /// </summary>
-    public class Drawing
+    public class DrawingModel
     {
         /// <summary>
         /// Модель чертежа.
         /// </summary>
-        public Drawing(List<LayerViewModel> layers)
+        public DrawingModel(List<LayerModel> layers)
         {
             foreach (var layerDto in layers)
             {
@@ -23,6 +23,6 @@
         /// <summary>
         /// Слои, содержащие объекты.
         /// </summary>
-        public List<LayerViewModel> Layers { get; }
+        public List<LayerModel> Layers { get; }
     }
 }

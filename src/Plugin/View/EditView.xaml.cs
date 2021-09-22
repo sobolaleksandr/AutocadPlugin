@@ -1,14 +1,14 @@
-﻿namespace ACADPlugin
+﻿namespace ACADPlugin.View
 {
     /// <summary>
     /// Окно редактирования примитивов.
     /// </summary>
-    public partial class EditWindow
+    public partial class EditView
     {
         /// <summary>
         /// Окно редактирования примитивов.
         /// </summary>
-        public EditWindow()
+        public EditView()
         {
             InitializeComponent();
         }

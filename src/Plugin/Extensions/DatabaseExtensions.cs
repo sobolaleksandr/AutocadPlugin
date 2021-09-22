@@ -1,4 +1,4 @@
-﻿namespace ACADPlugin
+﻿namespace ACADPlugin.Extensions
 {
     using System.Collections.Generic;
     using System.Linq;
