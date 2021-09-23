@@ -6,6 +6,11 @@
     public class EditViewModel : ViewModelBase
     {
         /// <summary>
+        /// Заголовок окна.
+        /// </summary>
+        public static string WindowTitle => "Окно редактирования атрибутов.";
+
+        /// <summary>
         /// Поле редактирования первого атрибута примитива.
         /// </summary>
         private string _field1;

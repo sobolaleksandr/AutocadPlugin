@@ -8,8 +8,6 @@
     using ACADPlugin.View;
     using ACADPlugin.ViewModel;
 
-    using Autodesk.AutoCAD.Geometry;
-
     /// <summary>
     /// Команда изменения модели примитива.
     /// </summary>
@@ -31,42 +29,54 @@
             if (!(parameter is GeometryModel geometry))
                 return;
 
-            var viewData = geometry.EditViewData;
-            if (!ApplyChanges(viewData))
+            if (!(geometry is PointModel pointModel))
                 return;
 
-            switch (geometry)
+            var window = new EditView
             {
-                case PointModel point:
-                {
-                    var x = double.Parse(viewData.Field1);
-                    var y = double.Parse(viewData.Field2);
-                    var z = double.Parse(viewData.Field3);
-                    point.Position = new Point3d(x, y, z);
-                    return;
-                }
-                case LineModel line:
-                {
-                    line.StartPoint = viewData.Field1;
-                    line.EndPoint = viewData.Field2;
-                    line.Height = viewData.Field3;
-                    return;
-                }
-                case CircleModel circle:
-                {
-                    circle.Center = viewData.Field1;
-                    circle.Radius = viewData.Field2;
-                    circle.Height = viewData.Field3;
-                    return;
-                }
-                case LayerModel layer:
-                {
-                    layer.Color = viewData.Field1;
-                    layer.Name = viewData.Field2;
-                    layer.IsOff = viewData.Field3;
-                    return;
-                }
-            }
+                DataContext = pointModel
+            };
+
+            if (DialogUtilities.ShowDialog(window) != true)
+                return;
+
+            var viewData = geometry.EditViewData;
+            ApplyChanges(viewData);
+            //if (!ApplyChanges(viewData))
+            //    return;
+
+            //switch (geometry)
+            //{
+            //    case PointModel point:
+            //    {
+            //        var x = double.Parse(viewData.Field1);
+            //        var y = double.Parse(viewData.Field2);
+            //        var z = double.Parse(viewData.Field3);
+            //        point.Position = new Point3d(x, y, z);
+            //        return;
+            //    }
+            //    case LineModel line:
+            //    {
+            //        line.StartPoint = viewData.Field1;
+            //        line.EndPoint = viewData.Field2;
+            //        line.Height = viewData.Field3;
+            //        return;
+            //    }
+            //    case CircleModel circle:
+            //    {
+            //        circle.Center = viewData.Field1;
+            //        circle.Radius = viewData.Field2;
+            //        circle.Height = viewData.Field3;
+            //        return;
+            //    }
+            //    case LayerModel layer:
+            //    {
+            //        layer.Color = viewData.Field1;
+            //        layer.Name = viewData.Field2;
+            //        layer.IsOff = viewData.Field3;
+            //        return;
+            //    }
+            //}
         }
 
         /// <summary>

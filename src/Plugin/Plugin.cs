@@ -58,12 +58,7 @@
                     if (DialogUtilities.ShowDialog(window) == true)
                         transaction.Commit();
 
-                    //Блокируем все слои.
-                    var layerIds = GetLayerIds(transaction, database);
-                    foreach (var layerId in layerIds)
-                    {
-                        LockLayer(transaction, true, layerId);
-                    }
+                    LockLayers(database);
                 }
             }
             catch (Exception exception)
@@ -120,27 +115,47 @@
         /// Создать модели для каждого слоя.
         /// </summary>
         /// <param name="transaction"> Транзация. </param>
-        /// <param name="database"> База данных. </param>
+        /// <param name="database"> База чертежа. </param>
         /// <returns> Возвращает коллекцию моделей. </returns>
         private static List<LayerModel> CreateLayerModels(Transaction transaction, Database database)
         {
             var layers = new List<LayerModel>();
-            var layerIds = GetLayerIds(transaction, database);
+            var layerIds = GetLayerIds(database);
             foreach (var layerId in layerIds)
             {
-                try
-                {
-                    var layerTableRecord = LockLayer(transaction, false, layerId);
+                var layerTableRecord = LockLayer(transaction, false, layerId);
+                if (layerTableRecord != null)
                     layers.Add(new LayerModel(layerTableRecord));
-                }
-                catch (Exception)
-                {
-                    // Когда-то были обнаружены случаи, что нельзя было разлочить слой Но сделанная раннее проверка не являлась верной. Её пришлось убрать.
-                    // Чтобы избежать возможных ошибок, добавлен try-catch с пустой обработкой.
-                }
             }
 
             return layers;
+        }
+
+        /// <summary>
+        ///   Получить текущую таблицу слоёв.
+        /// </summary>
+        /// <param name="database">База чертежа.</param>
+        /// <param name="transaction">Транзакция.</param>
+        /// <param name="openMode">Режим открытия. По умолчанию - для чтения.</param>
+        /// <returns>Возвращает таблицу слоёв.</returns>
+        private static LayerTable GetCurrentLayerTable(Database database, Transaction transaction,
+            OpenMode openMode = OpenMode.ForRead)
+        {
+            return (LayerTable)transaction.GetObject(database.LayerTableId, openMode);
+        }
+
+        /// <summary>
+        ///   Получить идентификаторы всех слоёв.
+        /// </summary>
+        /// <param name="database">База чертежа.</param>
+        /// <returns>Возвращает список идентификаторов.</returns>
+        private static List<ObjectId> GetLayerIds(Database database)
+        {
+            using (var transaction = database.StartTransaction())
+            {
+                var layerTable = GetCurrentLayerTable(database, transaction);
+                return layerTable.OfType<ObjectId>().ToList();
+            }
         }
 
         /// <summary>
@@ -149,24 +164,37 @@
         /// <param name="transaction"> Транзакция. </param>
         /// <param name="isLocked"> Заблокировать/разблокировать слой. </param>
         /// <param name="layerId"> Id-слоя. </param>
-        /// <returns> Возвращает заблокированный/разблокированный слой. </returns>
+        /// <returns> Возвращает заблокированный/разблокированный слой если плучилось заблокировать/разблокировать. </returns>
         private static LayerTableRecord LockLayer(Transaction transaction, bool isLocked, ObjectId layerId)
         {
-            var layerTableRecord = (LayerTableRecord)transaction.GetObject(layerId, OpenMode.ForWrite);
-            layerTableRecord.IsLocked = isLocked;
-            return layerTableRecord;
+            try
+            {
+                var layerTableRecord = (LayerTableRecord)transaction.GetObject(layerId, OpenMode.ForWrite);
+                layerTableRecord.IsLocked = isLocked;
+                return layerTableRecord;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         /// <summary>
-        /// Получить Id-слоев с чертежа.
+        /// Блокирует все слои.
         /// </summary>
-        /// <param name="transaction"> Транзакция. </param>
-        /// <param name="database"> База данных чертежа. </param>
-        /// <returns> Возвращает список Id-слоев. </returns>
-        private static List<ObjectId> GetLayerIds(Transaction transaction, Database database)
+        /// <param name="database"> База чертежа. </param>
+        private static void LockLayers(Database database)
         {
-            var layerTable = (LayerTable)transaction.GetObject(database.LayerTableId, OpenMode.ForRead);
-            return layerTable.OfType<ObjectId>().ToList();
+            using (var transaction = database.StartTransaction())
+            {
+                var layerIds = GetLayerIds(database);
+                foreach (var layerId in layerIds)
+                {
+                    LockLayer(transaction, true, layerId);
+                }
+
+                transaction.Commit();
+            }
         }
     }
 }

@@ -7,7 +7,7 @@
         xmlns:view="clr-namespace:ACADPlugin.View"
         mc:Ignorable="d"
         ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen"
-        Title="Свойства рабочей области"
+        Title="{Binding WindowTitle}"
         d:DataContext="{d:DesignInstance Type=viewModel:EditViewModel,  IsDesignTimeCreatable=False }">
     <Grid>
         <Grid.RowDefinitions>
@@ -28,15 +28,23 @@
             </Grid.RowDefinitions>
 
             <Label Content="{Binding Label1}" Margin="5" />
-            <TextBox Name="Field1" Grid.Row="0" Grid.Column="1" Margin="5" VerticalContentAlignment="Center"
-                     IsReadOnly="False" Text="{Binding Field1, Mode=TwoWay}" />
+            <TextBox Grid.Row="0" Grid.Column="1" Margin="5" VerticalContentAlignment="Center"
+                     IsReadOnly="False"  >
+                <TextBox.Text>
+                    <Binding Path="Field1" Mode="TwoWay">
+                    <Binding.ValidationRules>
+                        <ExceptionValidationRule />
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+            </TextBox>
 
             <Label Grid.Row="1" Grid.Column="0" Margin="5" Content="{Binding Label2}" />
-            <TextBox Name="Field2" Grid.Row="1" Grid.Column="1" Margin="5" VerticalContentAlignment="Center"
+            <TextBox Grid.Row="1" Grid.Column="1" Margin="5" VerticalContentAlignment="Center"
                      IsReadOnly="False" Text="{Binding Field2, Mode=TwoWay}" />
 
             <Label Grid.Row="2" Grid.Column="0" Margin="5" Content="{Binding Label3}" />
-            <TextBox Name="Field3" Grid.Row="2" Grid.Column="1" Margin="5" VerticalContentAlignment="Center"
+            <TextBox Grid.Row="2" Grid.Column="1" Margin="5" VerticalContentAlignment="Center"
                      IsReadOnly="False" Text="{Binding Field3, Mode=TwoWay}" />
         </Grid>
 

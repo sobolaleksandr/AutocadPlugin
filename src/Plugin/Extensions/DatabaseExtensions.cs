@@ -57,7 +57,7 @@
         /// </summary>
         /// <param name="database">База чертежа.</param>
         /// <returns>Возвращает созданную транзакцию.</returns>
-        private static Transaction StartTransaction(this Database database)
+        public static Transaction StartTransaction(this Database database)
         {
             return database.TransactionManager.StartTransaction();
         }

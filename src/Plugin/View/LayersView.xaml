@@ -6,13 +6,15 @@
         xmlns:model="clr-namespace:ACADPlugin.Model"
         xmlns:view="clr-namespace:ACADPlugin.View"
         mc:Ignorable="d"
-        Title="Window1" Height="500" Width="871.429">
-    <StackPanel>
+        Title="{Binding WindowTitle}"
+        d:DataContext="{d:DesignInstance model:DrawingModel}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+    <StackPanel Height="Auto" Width="Auto">
         <DataGrid Height="Auto"
                   CanUserAddRows="False"
                   IsReadOnly="True"
                   AutoGenerateColumns="False"
-                  ItemsSource="{Binding Layers}" d:DataContext="{d:DesignInstance model:DrawingModel}">
+                  ItemsSource="{Binding Layers}">
             <DataGrid.Columns>
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
@@ -25,7 +27,7 @@
                                           AutoGenerateColumns="False"
                                           ItemsSource="{Binding Geometries}">
                                     <DataGrid.Columns>
-                                        <DataGridTextColumn Width="Auto" MinWidth="280" Header="Наимеования слоя"
+                                        <DataGridTextColumn Width="Auto" MinWidth="280" Header="Наименование слоя"
                                                             Binding="{Binding LayerName}"
                                                             IsReadOnly="True" />
                                         <DataGridTextColumn Width="Auto" MinWidth="280" Header="Тип объекта"
@@ -56,4 +58,5 @@
                     view:DialogResultButton.DialogResult="False" />
         </StackPanel>
     </StackPanel>
+    </ScrollViewer>
 </Window>

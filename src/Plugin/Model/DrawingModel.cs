@@ -24,5 +24,10 @@
         /// Слои, содержащие объекты.
         /// </summary>
         public List<LayerModel> Layers { get; }
+
+        /// <summary>
+        /// Заголовок окна.
+        /// </summary>
+        public static string WindowTitle => "Autocad Plugin";
     }
 }

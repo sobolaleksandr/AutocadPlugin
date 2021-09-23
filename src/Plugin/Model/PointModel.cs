@@ -1,9 +1,5 @@
 ﻿namespace ACADPlugin.Model
 {
-    using System.Globalization;
-
-    using ACADPlugin.ViewModel;
-
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
 
@@ -26,15 +22,15 @@
             _point = point;
             Position = point.Position;
             LayerId = point.LayerId;
-            EditViewData = new EditViewModel
-            {
-                Field1 = X,
-                Field2 = Y,
-                Field3 = Height,
-                Label1 = "X",
-                Label2 = "Y",
-                Label3 = "Высота",
-            };
+            //EditViewData = new EditViewModel
+            //{
+            //    Field1 = X,
+            //    Field2 = Y,
+            //    Field3 = Height,
+            //    Label1 = "X",
+            //    Label2 = "Y",
+            //    Label3 = "Высота",
+            //};
             _height = Position.Z;
         }
 
@@ -50,16 +46,6 @@
                 _height = value.Z;
             }
         }
-
-        /// <summary>
-        /// X-координата точки.
-        /// </summary>
-        private string X => Position.X.ToString(CultureInfo.InvariantCulture);
-
-        /// <summary>
-        /// Y-координата точки.
-        /// </summary>
-        private string Y => Position.Y.ToString(CultureInfo.InvariantCulture);
 
         protected override string GetTypeName()
         {
