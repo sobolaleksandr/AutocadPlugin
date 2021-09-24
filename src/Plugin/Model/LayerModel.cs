@@ -39,6 +39,11 @@
             };
         }
 
+        public LayerModel()
+        {
+
+        }
+
         /// <summary>
         /// Цвет слоя.
         /// </summary>

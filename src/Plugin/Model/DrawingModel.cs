@@ -20,10 +20,13 @@
             Layers = layers;
         }
 
+        public static string Header => "Слои";
+
         /// <summary>
         /// Слои, содержащие объекты.
         /// </summary>
         public List<LayerModel> Layers { get; }
+
 
         /// <summary>
         /// Заголовок окна.

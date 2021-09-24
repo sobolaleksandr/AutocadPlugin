@@ -7,8 +7,53 @@
         xmlns:view="clr-namespace:ACADPlugin.View"
         mc:Ignorable="d"
         Title="{Binding WindowTitle}"
-        d:DataContext="{d:DesignInstance model:DrawingModel}">
-    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        d:DataContext="{d:DesignInstance model:DrawingModel}" Height="500" Width="560">
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions >
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <TreeView>
+                <TreeViewItem Header="{Binding Header}" ItemsSource="{Binding Layers}">
+                    <TreeViewItem.ItemTemplate>
+                        <HierarchicalDataTemplate >
+                            <TreeViewItem Header="{Binding Name}" ItemsSource="{Binding LayerViewModels}" d:DataContext="{d:DesignInstance model:DrawingViewModel}">
+                                <TreeViewItem.ItemTemplate>
+                                    <HierarchicalDataTemplate >
+                                        <TreeViewItem Header="Компонетн" ItemsSource="{Binding Geometries}">
+                                            <TreeViewItem.ItemTemplate>
+                                                <HierarchicalDataTemplate >
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Label Content="{Binding Path=Name}" VerticalAlignment="Center"></Label>
+                                                    </StackPanel>
+                                                </HierarchicalDataTemplate>
+                                            </TreeViewItem.ItemTemplate>
+                                        </TreeViewItem>
+                                    </HierarchicalDataTemplate>
+                                </TreeViewItem.ItemTemplate>
+                            </TreeViewItem>
+                        </HierarchicalDataTemplate>
+                    </TreeViewItem.ItemTemplate>
+                </TreeViewItem>
+            </TreeView>
+        </ScrollViewer>
+        <StackPanel d:DataContext="{d:DesignInstance model:DrawingViewModel}" Grid.Row="1" Grid.Column="0" Height ="Auto" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Height="25" Margin="5" Padding="15,0,15,0" Content="Применить изменения"
+                    view:DialogResultButton.DialogResult="True" />
+            <Button Height="25" Margin="5" Padding="15,0,15,0"
+                    Content="Редактировать"
+                    Command="{Binding EditCommand}"
+                    CommandParameter="{Binding}" />
+            <Button Height="25" Margin="5" Padding="15,0,15,0"
+                    Content="Отменить изменения"
+                    Command="{Binding EditCommand}"
+                    CommandParameter="{Binding}" />
+            <Button Height="25" Margin="5" Padding="15,0,15,0" Content="Отменить"
+                    view:DialogResultButton.DialogResult="False" />
+        </StackPanel>
+    </Grid>
+    <!--<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
     <StackPanel Height="Auto" Width="Auto">
         <DataGrid Height="Auto"
                   CanUserAddRows="False"
@@ -58,5 +103,5 @@
                     view:DialogResultButton.DialogResult="False" />
         </StackPanel>
     </StackPanel>
-    </ScrollViewer>
+    </ScrollViewer>-->
 </Window>

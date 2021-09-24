@@ -11,7 +11,7 @@
         /// <summary>
         /// Поле свойства <see cref="IsDataValid"/>.
         /// </summary>
-        private bool _isDataValid;
+        private bool _isDataValid = true;
 
         /// <summary>
         /// Правильно ли введены значения.

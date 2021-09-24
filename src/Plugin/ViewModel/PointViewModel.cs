@@ -1,5 +1,6 @@
 ﻿namespace ACADPlugin.ViewModel
 {
+    using System;
     using System.ComponentModel;
     using System.Globalization;
 
@@ -17,17 +18,11 @@
         /// <summary>
         /// Вью-модель точки.
         /// </summary>
-        public PointViewModel(Point3d point, string error)
+        public PointViewModel(Point3d point)
         {
-            Error = error;
             X = point.X.ToString(CultureInfo.InvariantCulture);
             Y = point.Y.ToString(CultureInfo.InvariantCulture);
             Z = point.Z.ToString(CultureInfo.InvariantCulture);
-        }
-
-        public PointViewModel(string error)
-        {
-            Error = error;
         }
 
         public static string TitleX => "X-координата точки";
@@ -74,7 +69,7 @@
             }
         }
 
-        public string Error { get; }
+        public string Error => throw new NotSupportedException("Неподдерживаемая функция");
 
         public string this[string columnName]
         {
@@ -85,13 +80,13 @@
                 switch (columnName)
                 {
                     case nameof(X):
-                        error = CreateErrorMessage(X, error, TitleX);
+                        error = ValidateDouble(X, error, TitleX);
                         break;
                     case nameof(Y):
-                        error = CreateErrorMessage(Y, error, TitleY);
+                        error = ValidateDouble(Y, error, TitleY);
                         break;
                     case nameof(Z):
-                        error = CreateErrorMessage(Z, error, TitleZ);
+                        error = ValidateDouble(Z, error, TitleZ);
                         break;
                 }
 
@@ -99,15 +94,13 @@
             }
         }
 
-        private string CreateErrorMessage(string value, string error, string title)
+        private string ValidateDouble(string value, string error, string title)
         {
             if (!double.TryParse(value, out _))
             {
-                error = $@"В поле {title} должно быть число!";
-                IsDataValid = false;
+                error = $@"В поле '{title}' должно быть число!";
             }
 
-            IsDataValid = true;
             return error;
         }
     }
