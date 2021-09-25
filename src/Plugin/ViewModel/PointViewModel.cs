@@ -1,6 +1,5 @@
 ﻿namespace ACADPlugin.ViewModel
 {
-    using System;
     using System.ComponentModel;
     using System.Globalization;
 
@@ -20,9 +19,9 @@
         /// </summary>
         public PointViewModel(Point3d point)
         {
-            X = point.X.ToString(CultureInfo.InvariantCulture);
-            Y = point.Y.ToString(CultureInfo.InvariantCulture);
-            Z = point.Z.ToString(CultureInfo.InvariantCulture);
+            X = point.X.ToString("0.00", new CultureInfo("en-US"));
+            Y = point.Y.ToString("0.00", new CultureInfo("en-US"));
+            Z = point.Z.ToString("0.00", new CultureInfo("en-US"));
         }
 
         public static string TitleX => "X-координата точки";
@@ -69,7 +68,7 @@
             }
         }
 
-        public string Error => throw new NotSupportedException("Неподдерживаемая функция");
+        public string Error => this[nameof(X)] + this[nameof(Y)] + this[nameof(Z)];
 
         public string this[string columnName]
         {
@@ -92,16 +91,6 @@
 
                 return error;
             }
-        }
-
-        private string ValidateDouble(string value, string error, string title)
-        {
-            if (!double.TryParse(value, out _))
-            {
-                error = $@"В поле '{title}' должно быть число!";
-            }
-
-            return error;
         }
     }
 }

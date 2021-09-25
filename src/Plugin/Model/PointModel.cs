@@ -1,5 +1,7 @@
 ﻿namespace ACADPlugin.Model
 {
+    using System.Globalization;
+
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
 
@@ -20,18 +22,7 @@
         public PointModel(DBPoint point)
         {
             _point = point;
-            Position = point.Position;
             LayerId = point.LayerId;
-            //EditViewData = new EditViewModel
-            //{
-            //    Field1 = X,
-            //    Field2 = Y,
-            //    Field3 = Height,
-            //    Label1 = "X",
-            //    Label2 = "Y",
-            //    Label3 = "Высота",
-            //};
-            _height = Position.Z;
         }
 
         /// <summary>
@@ -40,11 +31,12 @@
         public Point3d Position
         {
             get => _point.Position;
-            set
-            {
-                _point.Position = value;
-                _height = value.Z;
-            }
+            set => _point.Position = value;
+        }
+
+        protected override string GetInformation()
+        {
+            return $@"{Position.ToString("0.00", new CultureInfo("en-US"))}";
         }
 
         protected override string GetTypeName()

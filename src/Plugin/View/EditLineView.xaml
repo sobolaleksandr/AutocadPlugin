@@ -1,14 +1,13 @@
-﻿<Window x:Class="ACADPlugin.View.UserControl1"
+﻿<Window x:Class="ACADPlugin.View.EditLineView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:viewModel="clr-namespace:ACADPlugin.ViewModel"
         xmlns:view="clr-namespace:ACADPlugin.View"
-        mc:Ignorable="d"
         ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen"
-        Title="{Binding WindowTitle}"
-        d:DataContext="{d:DesignInstance Type=viewModel:PointViewModel,  IsDesignTimeCreatable=False }">
+        mc:Ignorable="d"
+        Title="{Binding WindowTitle}" d:DataContext="{d:DesignInstance viewModel:LineViewModel, IsDesignTimeCreatable=False}">
     <Window.Resources>
         <ControlTemplate x:Key="ValidationFailed">
             <StackPanel Orientation="Horizontal">
@@ -18,7 +17,6 @@
                 <TextBlock Foreground="Red" FontSize="16" FontWeight="Bold">!</TextBlock>
             </StackPanel>
         </ControlTemplate>
-
         <Style x:Key="TextBoxStyle" TargetType="TextBox">
             <Setter Property="Margin" Value="5" />
             <Setter Property="TextAlignment" Value="Center" />
@@ -39,7 +37,7 @@
         <Style x:Key="LabelStyle" TargetType="Label">
             <Setter Property="Margin" Value="5" />
             <Setter Property="HorizontalAlignment" Value="Center" />
-            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="Width" Value="Auto" />
         </Style>
     </Window.Resources>
@@ -49,7 +47,6 @@
             <RowDefinition />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-
         <Grid Width="400">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -59,14 +56,14 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
-
-
-            <Label Grid.Row="0" Grid.Column="0" Content="{Binding TitleX}" Style="{StaticResource LabelStyle}" />
+            <Label Grid.Row="0" Grid.Column="0" Content="{Binding TitleStartX}" Style="{StaticResource LabelStyle}" />
             <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource TextBoxStyle}"
                      Validation.ErrorTemplate="{StaticResource ValidationFailed}">
                 <TextBox.Text>
-                    <Binding Path="X" Mode="TwoWay">
+                    <Binding Path="StartX" Mode="TwoWay">
                         <Binding.ValidationRules>
                             <DataErrorValidationRule />
                         </Binding.ValidationRules>
@@ -74,24 +71,45 @@
                 </TextBox.Text>
             </TextBox>
 
-            <Label Grid.Row="1" Grid.Column="0" Content="{Binding TitleY}"
+            <Label Grid.Row="1" Grid.Column="0" Content="{Binding TitleStartY}"
                    Style="{StaticResource LabelStyle}" />
             <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource TextBoxStyle}"
                      Validation.ErrorTemplate="{StaticResource ValidationFailed}">
                 <TextBox.Text>
-                    <Binding Path="Y" Mode="TwoWay">
+                    <Binding Path="StartY" Mode="TwoWay">
                         <Binding.ValidationRules>
                             <DataErrorValidationRule />
                         </Binding.ValidationRules>
                     </Binding>
                 </TextBox.Text>
             </TextBox>
-
-            <Label Grid.Row="2" Grid.Column="0" Content="{Binding TitleZ}" Style="{StaticResource LabelStyle}" />
+            <Label Grid.Row="2" Grid.Column="0" Content="{Binding TitleEndX}" Style="{StaticResource LabelStyle}" />
             <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource TextBoxStyle}"
                      Validation.ErrorTemplate="{StaticResource ValidationFailed}">
                 <TextBox.Text>
-                    <Binding Path="Z" Mode="TwoWay">
+                    <Binding Path="EndX" Mode="TwoWay">
+                        <Binding.ValidationRules>
+                            <DataErrorValidationRule />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+            <Label Grid.Row="3" Grid.Column="0" Content="{Binding TitleEndY}" Style="{StaticResource LabelStyle}" />
+            <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource TextBoxStyle}"
+                     Validation.ErrorTemplate="{StaticResource ValidationFailed}">
+                <TextBox.Text>
+                    <Binding Path="EndY" Mode="TwoWay">
+                        <Binding.ValidationRules>
+                            <DataErrorValidationRule />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+            <Label Grid.Row="4" Grid.Column="0" Content="{Binding TitleHeight}" Style="{StaticResource LabelStyle}" />
+            <TextBox Grid.Row="4" Grid.Column="1" Style="{StaticResource TextBoxStyle}"
+                     Validation.ErrorTemplate="{StaticResource ValidationFailed}">
+                <TextBox.Text>
+                    <Binding Path="Height" Mode="TwoWay">
                         <Binding.ValidationRules>
                             <DataErrorValidationRule />
                         </Binding.ValidationRules>
@@ -100,10 +118,9 @@
             </TextBox>
 
         </Grid>
-
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Height="25" Margin="5" Padding="15,0,15,0" Content="Принять"
-                    view:DialogResultButton.DialogResult="True" IsEnabled="{Binding IsDataValid}"/>
+                    view:DialogResultButton.DialogResult="True" Command="{Binding ApplyCommand}" CommandParameter="{Binding}" />
             <Button Height="25" Margin="5" Padding="15,0,15,0" Content="Закрыть"
                     view:DialogResultButton.DialogResult="False" />
         </StackPanel>

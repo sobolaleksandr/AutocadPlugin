@@ -8,48 +8,82 @@
         mc:Ignorable="d"
         Title="{Binding WindowTitle}"
         d:DataContext="{d:DesignInstance model:DrawingModel}" Height="500" Width="560">
-    <Grid >
+    <Window.Resources>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="25" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="Padding" Value="15,0,15,0" />
+        </Style>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </Window.Resources>
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
-        </Grid.RowDefinitions >
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
         <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
             <TreeView>
                 <TreeViewItem Header="{Binding Header}" ItemsSource="{Binding Layers}">
                     <TreeViewItem.ItemTemplate>
-                        <HierarchicalDataTemplate >
-                            <TreeViewItem Header="{Binding Name}" ItemsSource="{Binding LayerViewModels}" d:DataContext="{d:DesignInstance model:DrawingViewModel}">
-                                <TreeViewItem.ItemTemplate>
-                                    <HierarchicalDataTemplate >
-                                        <TreeViewItem Header="Компонетн" ItemsSource="{Binding Geometries}">
-                                            <TreeViewItem.ItemTemplate>
-                                                <HierarchicalDataTemplate >
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <Label Content="{Binding Path=Name}" VerticalAlignment="Center"></Label>
+                        <HierarchicalDataTemplate>
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="{Binding Type}" VerticalAlignment="Center" />
+                                    <Label
+                                        Visibility="{Binding IsChanged, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}"
+                                        Content="Изменено" VerticalAlignment="Center" />
+                                </StackPanel>
+
+                                <Button Style="{StaticResource ButtonStyle}"
+                                        Content="Редактировать"
+                                        Command="{Binding EditCommand}"
+                                        CommandParameter="{Binding}" />
+
+                                <TreeViewItem ItemsSource="{Binding Geometries}"
+                                              d:DataContext="{d:DesignInstance model:LayerModel}">
+                                    <TreeViewItem.ItemTemplate>
+                                        <HierarchicalDataTemplate>
+                                            <StackPanel>
+                                                <TreeViewItem Header="{Binding Type}">
+                                                    <StackPanel Orientation="Vertical">
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <Label Content="{Binding Information}"
+                                                                   VerticalAlignment="Center" />
+                                                            <Label
+                                                                Visibility="{Binding IsChanged, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}"
+                                                                Content="Изменено" VerticalAlignment="Center" />
+                                                        </StackPanel>
+
+                                                        <Button Style="{StaticResource ButtonStyle}"
+                                                                Content="..."
+                                                                Command="{Binding EditCommand}"
+                                                                CommandParameter="{Binding}" />
                                                     </StackPanel>
-                                                </HierarchicalDataTemplate>
-                                            </TreeViewItem.ItemTemplate>
-                                        </TreeViewItem>
-                                    </HierarchicalDataTemplate>
-                                </TreeViewItem.ItemTemplate>
-                            </TreeViewItem>
+                                                </TreeViewItem>
+                                            </StackPanel>
+                                        </HierarchicalDataTemplate>
+                                    </TreeViewItem.ItemTemplate>
+                                </TreeViewItem>
+
+                            </StackPanel>
+
                         </HierarchicalDataTemplate>
                     </TreeViewItem.ItemTemplate>
                 </TreeViewItem>
             </TreeView>
         </ScrollViewer>
-        <StackPanel d:DataContext="{d:DesignInstance model:DrawingViewModel}" Grid.Row="1" Grid.Column="0" Height ="Auto" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Height="25" Margin="5" Padding="15,0,15,0" Content="Применить изменения"
+        <StackPanel Grid.Row="1" Grid.Column="0" Height="Auto" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Style="{StaticResource ButtonStyle}" Content="Применить изменения"
                     view:DialogResultButton.DialogResult="True" />
-            <Button Height="25" Margin="5" Padding="15,0,15,0"
+            <Button Style="{StaticResource ButtonStyle}"
                     Content="Редактировать"
                     Command="{Binding EditCommand}"
                     CommandParameter="{Binding}" />
-            <Button Height="25" Margin="5" Padding="15,0,15,0"
+            <Button Style="{StaticResource ButtonStyle}"
                     Content="Отменить изменения"
                     Command="{Binding EditCommand}"
                     CommandParameter="{Binding}" />
-            <Button Height="25" Margin="5" Padding="15,0,15,0" Content="Отменить"
+            <Button Style="{StaticResource ButtonStyle}" Content="Отменить"
                     view:DialogResultButton.DialogResult="False" />
         </StackPanel>
     </Grid>

@@ -1,21 +1,19 @@
 ﻿namespace ACADPlugin.Model
 {
-    using System.Globalization;
+    using System.ComponentModel;
+    using System.Runtime.CompilerServices;
 
+    using ACADPlugin.Annotations;
     using ACADPlugin.Command;
-    using ACADPlugin.ViewModel;
 
     using Autodesk.AutoCAD.DatabaseServices;
 
     /// <summary>
     /// Базовый класс примитива.
     /// </summary>
-    public abstract class GeometryModel
+    public abstract class GeometryModel : INotifyPropertyChanged
     {
-        /// <summary>
-        /// Высота примитива.
-        /// </summary>
-        protected double _height;
+        private bool _isChanged;
 
         /// <summary>
         /// Базовый класс примитива.
@@ -30,23 +28,15 @@
         /// </summary>
         public EditCommand EditCommand { get; set; }
 
-        /// <summary>
-        /// Вью модель изменения примитива.
-        /// </summary>
-        public EditViewModel EditViewData { get; protected set; }
+        public string Information => GetInformation();
 
-        /// <summary>
-        /// Высота примитива.
-        /// </summary>
-        public string Height
+        public bool IsChanged
         {
-            get => _height.ToString(CultureInfo.InvariantCulture);
+            get => _isChanged;
             set
             {
-                if (!double.TryParse(value, out var height))
-                    return;
-
-                _height = height;
+                _isChanged = value;
+                OnPropertyChanged();
             }
         }
 
@@ -56,19 +46,24 @@
         public ObjectId LayerId { get; protected set; }
 
         /// <summary>
-        /// Имя слоя.
-        /// </summary>
-        public string LayerName { get; set; }
-
-        /// <summary>
         /// Тип примитива.
         /// </summary>
         public string Type => GetTypeName();
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected abstract string GetInformation();
 
         /// <summary>
         /// Функция получения имени примитва.
         /// </summary>
         /// <returns> Возращает имя примитива. </returns>
         protected abstract string GetTypeName();
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

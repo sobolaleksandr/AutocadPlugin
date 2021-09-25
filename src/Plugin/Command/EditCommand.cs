@@ -8,6 +8,8 @@
     using ACADPlugin.View;
     using ACADPlugin.ViewModel;
 
+    using Autodesk.AutoCAD.Geometry;
+
     /// <summary>
     /// Команда изменения модели примитива.
     /// </summary>
@@ -29,69 +31,88 @@
             if (!(parameter is GeometryModel geometry))
                 return;
 
-            if (!(geometry is PointModel pointModel))
-                return;
-
-            var window = new EditView
+            switch (geometry)
             {
-                DataContext = pointModel
-            };
+                case PointModel point:
+                {
+                    var vm = new PointViewModel(point.Position);
+                    var window = new EditPointView
+                    {
+                        DataContext = vm
+                    };
 
-            if (DialogUtilities.ShowDialog(window) != true)
-                return;
+                    if (DialogUtilities.ShowDialog(window) == true)
+                    {
+                        point.IsChanged = true;
+                        var x = double.Parse(vm.X);
+                        var y = double.Parse(vm.Y);
+                        var z = double.Parse(vm.Z);
+                        point.Position = new Point3d(x, y, z);
+                    }
 
-            var viewData = geometry.EditViewData;
-            ApplyChanges(viewData);
-            //if (!ApplyChanges(viewData))
-            //    return;
+                    break;
+                }
+                case CircleModel circle:
+                {
+                    var vm = new CircleViewModel(circle);
+                    var window = new EditCircleView
+                    {
+                        DataContext = vm
+                    };
 
-            //switch (geometry)
-            //{
-            //    case PointModel point:
-            //    {
-            //        var x = double.Parse(viewData.Field1);
-            //        var y = double.Parse(viewData.Field2);
-            //        var z = double.Parse(viewData.Field3);
-            //        point.Position = new Point3d(x, y, z);
-            //        return;
-            //    }
-            //    case LineModel line:
-            //    {
-            //        line.StartPoint = viewData.Field1;
-            //        line.EndPoint = viewData.Field2;
-            //        line.Height = viewData.Field3;
-            //        return;
-            //    }
-            //    case CircleModel circle:
-            //    {
-            //        circle.Center = viewData.Field1;
-            //        circle.Radius = viewData.Field2;
-            //        circle.Height = viewData.Field3;
-            //        return;
-            //    }
-            //    case LayerModel layer:
-            //    {
-            //        layer.Color = viewData.Field1;
-            //        layer.Name = viewData.Field2;
-            //        layer.IsOff = viewData.Field3;
-            //        return;
-            //    }
-            //}
-        }
+                    if (DialogUtilities.ShowDialog(window) == true)
+                    {
+                        circle.IsChanged = true;
+                        var x = double.Parse(vm.X);
+                        var y = double.Parse(vm.Y);
+                        var z = double.Parse(vm.Z);
+                        circle.Center = new Point3d(x, y, z);
+                        circle.Radius = double.Parse(vm.Radius);
+                    }
 
-        /// <summary>
-        /// Команда открытия окна редактирования примитива
-        /// </summary>
-        /// <param name="viewData"> Вью-модель редактирования примитива. </param>
-        /// <returns> Возращает true, если пользователь принял изменения. </returns>
-        private static bool ApplyChanges(EditViewModel viewData)
-        {
-            var window = new EditView
-            {
-                DataContext = viewData
-            };
+                    break;
+                }
+                case LayerModel layer:
+                {
+                    var vm = new LayerViewModel(layer);
+                    var window = new EditLayerView
+                    {
+                        DataContext = vm
+                    };
 
-            return DialogUtilities.ShowDialog(window) == true;
+                    if (DialogUtilities.ShowDialog(window) == true)
+                    {
+                        layer.IsChanged = true;
+                        layer.IsOff = vm.Visibility;
+                        layer.Name = vm.Name;
+                        layer.Color = vm.LayerColor;
+                    }
+
+                    break;
+                }
+                case LineModel line:
+                {
+                    var vm = new LineViewModel(line);
+                    var window = new EditLineView()
+                    {
+                        DataContext = vm
+                    };
+
+                    if (DialogUtilities.ShowDialog(window) == true)
+                    {
+                        line.IsChanged = true;
+                        var startX = double.Parse(vm.StartY);
+                        var startY = double.Parse(vm.StartY);
+                        var endX = double.Parse(vm.EndY);
+                        var endY = double.Parse(vm.EndY);
+                        var height = double.Parse(vm.Height);
+                        line.StartPoint = new Point3d(startX, startY, height);
+                        line.EndPoint = new Point3d(endX, endY, height);
+                    }
+
+                    break;
+                }
+            }
         }
     }
 }

@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace ACADPlugin.View
 {
     /// <summary>
-    /// Interaction logic for EditLayerView.xaml
+    /// Interaction logic for EditLineView.xaml
     /// </summary>
-    public partial class EditLayerView
+    public partial class EditLineView
     {
-        public EditLayerView()
+        public EditLineView()
         {
             InitializeComponent();
         }

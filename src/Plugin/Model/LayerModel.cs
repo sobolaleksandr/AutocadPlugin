@@ -4,8 +4,6 @@
     using System.Collections.Generic;
     using System.Globalization;
 
-    using ACADPlugin.ViewModel;
-
     using Autodesk.AutoCAD.Colors;
     using Autodesk.AutoCAD.DatabaseServices;
 
@@ -26,47 +24,21 @@
         public LayerModel(LayerTableRecord layer)
         {
             _layer = layer;
-            Geometries = new List<GeometryModel> { this };
-            LayerName = layer.Name;
-            EditViewData = new EditViewModel
-            {
-                Field1 = Color,
-                Field2 = Name,
-                Field3 = IsOff,
-                Label1 = "Цвет",
-                Label2 = "Название",
-                Label3 = "Видимость",
-            };
-        }
-
-        public LayerModel()
-        {
-
         }
 
         /// <summary>
         /// Цвет слоя.
         /// </summary>
-        public string Color
+        public Color Color
         {
-            get
-            {
-                var color = _layer.EntityColor.ColorIndex;
-                return color.ToString(CultureInfo.InvariantCulture);
-            }
-            set
-            {
-                if (!short.TryParse(value, out var color))
-                    return;
-
-                _layer.Color = Autodesk.AutoCAD.Colors.Color.FromColorIndex(ColorMethod.ByAci, color);
-            }
+            get => _layer.Color;
+            set => _layer.Color = value;
         }
 
         /// <summary>
         /// Примитивы в слое.
         /// </summary>
-        public List<GeometryModel> Geometries { get; }
+        public List<GeometryModel> Geometries { get; private set; }
 
         /// <summary>
         /// Идентификатор слоя.
@@ -74,27 +46,12 @@
         public ObjectId Id => _layer.Id;
 
         /// <summary>
-        /// Проверка на нулевой слой.
-        /// </summary>
-        private bool IsEditable => !Name.Equals("0", StringComparison.CurrentCultureIgnoreCase);
-
-        /// <summary>
         /// Видимость слоя.
         /// </summary>
-        public string IsOff
+        public bool IsOff
         {
-            get
-            {
-                var isOff = !_layer.IsOff;
-                return isOff.ToString(CultureInfo.InvariantCulture);
-            }
-            set
-            {
-                if (!bool.TryParse(value, out var isOff))
-                    return;
-
-                _layer.IsOff = !isOff;
-            }
+            get => !_layer.IsOff;
+            set => _layer.IsOff = !value;
         }
 
         /// <summary>
@@ -102,28 +59,30 @@
         /// </summary>
         public string Name
         {
-            get => _layer.Name.ToString(CultureInfo.InvariantCulture);
-            set
-            {
-                if (IsEditable)
-                    _layer.Name = value.ToString(CultureInfo.InvariantCulture);
-            }
+            get => _layer.Name;
+            set => _layer.Name = value;
         }
 
-        /// <summary>
-        /// Функция задания всем объектам имени слоя.
-        /// </summary>
-        public void AssignLayerName()
+        public void AddEntity(GeometryModel geometry)
         {
-            foreach (var geometry in Geometries)
-            {
-                geometry.LayerName = LayerName;
-            }
+            if (Geometries != null)
+                Geometries.Add(geometry);
+            else
+                Geometries = new List<GeometryModel> { geometry };
+        }
+
+        protected override string GetInformation()
+        {
+            throw new NotImplementedException();
         }
 
         protected override string GetTypeName()
         {
-            return "Слой";
+            var str = "виден";
+            if (_layer.IsOff)
+                str = "отключен";
+
+            return $"Слой {Name}, {_layer.Color} {str}";
         }
     }
 }

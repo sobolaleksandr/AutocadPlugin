@@ -1,30 +1,45 @@
 ﻿namespace ACADPlugin.ViewModel
 {
+    using System;
     using System.ComponentModel;
-    using System.Windows;
-    using System.Windows.Media;
 
-    using Xceed.Wpf.Toolkit;
+    using ACADPlugin.Model;
+
+    using Autodesk.AutoCAD.Colors;
 
     /// <summary>
     /// Вью-модель слоя.
     /// </summary>
     public class LayerViewModel : ViewModelBase, IDataErrorInfo
     {
-        private bool _visibility;
-        private string _name;
         private Color _layerColor;
-        public static string NameTitle => "Наименование слоя";
-        public static string VisibilityTitle => "Видимость слоя";
-        public static string ColorTitle => "Цвет слоя";
+        private string _name;
+        private bool _visibility;
 
-        public System.Windows.Media.Color LayerColor
+        public LayerViewModel(LayerModel layer)
         {
-            get => _layerColor;
-            set => _layerColor = value;
+            Visibility = layer.IsOff;
+            LayerColor = layer.Color;
+            Name = layer.Name;
+            OpenPaletteCommand = new OpenPaletteCommand();
         }
 
-        
+        public static string ColorTitle => "Цвет слоя";
+
+        /// <summary>
+        /// Проверка на нулевой слой.
+        /// </summary>
+        public bool IsEditable => !Name.Equals("0", StringComparison.CurrentCultureIgnoreCase);
+
+        public Color LayerColor
+        {
+            get => _layerColor;
+            set
+            {
+                _layerColor = value;
+                OnPropertyChanged();
+            }
+        }
 
         public string Name
         {
@@ -35,6 +50,10 @@
                 OnPropertyChanged();
             }
         }
+
+        public string NameTitle => IsEditable ? "Наименование слоя" : "Нельзя редактировать этот слой!";
+
+        public OpenPaletteCommand OpenPaletteCommand { get; set; }
 
         /// <summary>
         /// Видимость слоя.
@@ -48,6 +67,10 @@
                 OnPropertyChanged();
             }
         }
+
+        public static string VisibilityTitle => "Видимость слоя";
+
+        public string Error => this[nameof(Name)];
 
         public string this[string columnName]
         {
@@ -66,7 +89,5 @@
                 return error;
             }
         }
-
-        public string Error { get; }
     }
 }

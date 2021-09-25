@@ -7,6 +7,7 @@
     using ACADPlugin.ViewModel;
 
     using Autodesk.AutoCAD.DatabaseServices;
+    using Autodesk.AutoCAD.Geometry;
 
     /// <summary>
     /// Модель отрезка.
@@ -26,49 +27,40 @@
         {
             _line = line;
             LayerId = line.LayerId;
-            EditViewData = new EditViewModel
-            {
-                Field1 = EndPoint,
-                Field2 = StartPoint,
-                Field3 = Height,
-                Label1 = "Начальная точка",
-                Label2 = "Конечная точка",
-                Label3 = "Высота",
-            };
-            _height = Math.Min(line.StartPoint.Z, line.EndPoint.Z);
         }
 
         /// <summary>
         /// Конечная точка отрезка.
         /// </summary>
-        public string EndPoint
+        public Point3d EndPoint
         {
-            get => _line.EndPoint.ToString(CultureInfo.InvariantCulture);
+            get => _line.EndPoint;
             set
             {
-                var endPoint = value.ToPoint3d();
-                _line.EndPoint = endPoint;
-                _height = Math.Min(endPoint.Z, _line.StartPoint.Z);
+                _line.EndPoint = value;
             }
         }
 
         /// <summary>
         /// Начальная точка отрезка.
         /// </summary>
-        public string StartPoint
+        public Point3d StartPoint
         {
-            get => _line.StartPoint.ToString(CultureInfo.InvariantCulture);
+            get => _line.StartPoint;
             set
             {
-                var startPoint = value.ToPoint3d();
-                _line.StartPoint = startPoint;
-                _height = Math.Min(startPoint.Z, _line.EndPoint.Z);
+                _line.StartPoint = value;
             }
         }
 
         protected override string GetTypeName()
         {
             return "Отрезок";
+        }
+
+        protected override string GetInformation()
+        {
+            return $@"{StartPoint.ToString("0.00", new CultureInfo("en-US"))} {EndPoint.ToString("0.00", new CultureInfo("en-US"))}";
         }
     }
 }

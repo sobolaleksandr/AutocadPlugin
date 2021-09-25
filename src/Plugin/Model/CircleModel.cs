@@ -6,6 +6,7 @@
     using ACADPlugin.ViewModel;
 
     using Autodesk.AutoCAD.DatabaseServices;
+    using Autodesk.AutoCAD.Geometry;
 
     /// <summary>
     /// Модель окружности.
@@ -25,50 +26,40 @@
         {
             _circle = circle;
             LayerId = circle.LayerId;
-            EditViewData = new EditViewModel
-            {
-                Field1 = Center,
-                Field2 = Radius,
-                Field3 = Height,
-                Label1 = "Центр",
-                Label2 = "Радиус",
-                Label3 = "Высота",
-            };
-            _height = circle.Center.Z;
         }
 
         /// <summary>
         /// Координаты центра окружности.
         /// </summary>
-        public string Center
+        public Point3d Center
         {
-            get => _circle.Center.ToString(CultureInfo.InvariantCulture);
+            get => _circle.Center;
             set
             {
-                var center = value.ToPoint3d();
-                _circle.Center = center;
-                _height = center.Z;
+                _circle.Center = value;
             }
         }
 
         /// <summary>
         /// Радиус окружности.
         /// </summary>
-        public string Radius
+        public double Radius
         {
-            get => _circle.Radius.ToString(CultureInfo.InvariantCulture);
+            get => _circle.Radius;
             set
             {
-                if (!double.TryParse(value, out var radius))
-                    return;
-
-                _circle.Radius = radius;
+                _circle.Radius = value;
             }
         }
 
         protected override string GetTypeName()
         {
             return "Окружность";
+        }
+
+        protected override string GetInformation()
+        {
+            return $@"{Radius.ToString("0.00", new CultureInfo("en-US"))} {Center.ToString("0.00", new CultureInfo("en-US"))}";
         }
     }
 }

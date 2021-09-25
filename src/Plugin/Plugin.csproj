@@ -102,40 +102,24 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
-    <Reference Include="Xceed.Wpf.AvalonDock, Version=2.9.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.2.9\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
-    </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=2.9.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.2.9\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
-    </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=2.9.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.2.9\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
-    </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=2.9.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.2.9\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
-    </Reference>
-    <Reference Include="Xceed.Wpf.DataGrid, Version=2.9.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.2.9\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
-    </Reference>
-    <Reference Include="Xceed.Wpf.Toolkit, Version=2.9.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.2.9\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Command\ApplyCommand.cs" />
     <Compile Include="Model\CircleModel.cs" />
-    <Compile Include="Model\DrawingViewModel.cs" />
+    <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="ViewModel\CircleViewModel.cs" />
+    <Compile Include="ViewModel\LineViewModel.cs" />
     <Compile Include="Utilities\DialogUtilities.cs" />
     <Compile Include="ViewModel\LayerViewModel.cs" />
+    <Compile Include="ViewModel\OpenPaletteCommand.cs" />
     <Compile Include="ViewModel\PointViewModel.cs" />
     <Compile Include="ViewModel\TestItem.cs" />
     <Compile Include="View\DialogResultButton.cs" />
     <Compile Include="ViewModel\DialogViewModelBase.cs" />
     <Compile Include="Command\EditCommand.cs" />
-    <Compile Include="ViewModel\EditViewModel.cs" />
     <Compile Include="Model\GeometryModel.cs" />
     <Compile Include="Model\LayerModel.cs" />
     <Compile Include="Model\DrawingModel.cs" />
@@ -146,26 +130,34 @@
     <Compile Include="Model\LineModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\StringToPoint3dConverter.cs" />
+    <Compile Include="View\EditCircleView.xaml.cs">
+      <DependentUpon>EditCircleView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\EditLayerView.xaml.cs">
       <DependentUpon>EditLayerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\EditLineView.xaml.cs">
+      <DependentUpon>EditLineView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\LayersView.xaml.cs">
       <DependentUpon>LayersView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\EditView.xaml.cs">
-      <DependentUpon>EditView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="View\TreeTemplateSelector.cs" />
-    <Compile Include="View\UserControl1.xaml.cs">
-      <DependentUpon>UserControl1.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\UserControl2.xaml.cs">
-      <DependentUpon>UserControl2.xaml</DependentUpon>
+    <Compile Include="View\EditPointView.xaml.cs">
+      <DependentUpon>EditPointView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="View\EditCircleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\EditLayerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\EditLineView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -173,15 +165,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\EditView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\UserControl1.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\UserControl2.xaml">
+    <Page Include="View\EditPointView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

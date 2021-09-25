@@ -1,18 +1,23 @@
 ﻿namespace ACADPlugin
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Windows;
+    using System.Windows.Forms;
 
     using ACADPlugin.Extensions;
     using ACADPlugin.Model;
     using ACADPlugin.Utilities;
     using ACADPlugin.View;
 
+    using Autodesk.AutoCAD.Colors;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Runtime;
 
     using Application = Autodesk.AutoCAD.ApplicationServices.Core.Application;
+    using ColorDialog = Autodesk.AutoCAD.Windows.ColorDialog;
+    using Exception = Autodesk.AutoCAD.Runtime.Exception;
+    using MessageBox = System.Windows.MessageBox;
 
     /// <summary>
     /// Плагин для AutoCad
@@ -82,11 +87,8 @@
                 var dbObject = transaction.GetObject(objectId, OpenMode.ForWrite, true, true);
                 var geometry = CreateGeometry(dbObject);
                 var layer = layers.FirstOrDefault(l => l.Id == geometry?.LayerId);
-                layer?.Geometries.Add(geometry);
+                layer?.AddEntity(geometry);
             }
-
-            // Больше одного т.к. мы добавляем первым объектом сам слой в коллекцию объектов
-            //var nonEmptyLayers = layers.Where(l => l.Geometries.Count > 1).ToList();
 
             return new DrawingModel(layers);
         }
