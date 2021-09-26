@@ -39,7 +39,7 @@
         <Style x:Key="LabelStyle" TargetType="Label">
             <Setter Property="Margin" Value="5" />
             <Setter Property="HorizontalAlignment" Value="Center" />
-            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="Width" Value="Auto" />
         </Style>
     </Window.Resources>
@@ -100,10 +100,14 @@
             </TextBox>
 
         </Grid>
-
+        <Button Grid.Row="2" Height="25" Margin="5" Padding="15,0,15,0" Content="Восстановить"
+                HorizontalAlignment="Left"
+                view:DialogResultButton.DialogResult="True"
+                Command="{Binding RestoreCommand}" CommandParameter="{Binding}" />
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Height="25" Margin="5" Padding="15,0,15,0" Content="Принять"
-                    view:DialogResultButton.DialogResult="True" Command="{Binding ApplyCommand}" CommandParameter="{Binding}"/>
+                    view:DialogResultButton.DialogResult="True" Command="{Binding ApplyCommand}"
+                    CommandParameter="{Binding}" />
             <Button Height="25" Margin="5" Padding="15,0,15,0" Content="Закрыть"
                     view:DialogResultButton.DialogResult="False" />
         </StackPanel>

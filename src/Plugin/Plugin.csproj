@@ -108,15 +108,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Command\ApplyCommand.cs" />
+    <Compile Include="Command\RestoreCommand.cs" />
     <Compile Include="Model\CircleModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModel\CircleViewModel.cs" />
     <Compile Include="ViewModel\LineViewModel.cs" />
     <Compile Include="Utilities\DialogUtilities.cs" />
     <Compile Include="ViewModel\LayerViewModel.cs" />
-    <Compile Include="ViewModel\OpenPaletteCommand.cs" />
+    <Compile Include="Command\OpenPaletteCommand.cs" />
     <Compile Include="ViewModel\PointViewModel.cs" />
-    <Compile Include="ViewModel\TestItem.cs" />
     <Compile Include="View\DialogResultButton.cs" />
     <Compile Include="ViewModel\DialogViewModelBase.cs" />
     <Compile Include="Command\EditCommand.cs" />
@@ -143,7 +143,6 @@
       <DependentUpon>LayersView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\ViewModelBase.cs" />
-    <Compile Include="View\TreeTemplateSelector.cs" />
     <Compile Include="View\EditPointView.xaml.cs">
       <DependentUpon>EditPointView.xaml</DependentUpon>
     </Compile>

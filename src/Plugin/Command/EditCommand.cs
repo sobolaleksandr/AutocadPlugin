@@ -35,7 +35,7 @@
             {
                 case PointModel point:
                 {
-                    var vm = new PointViewModel(point.Position);
+                    var vm = new PointViewModel(point);
                     var window = new EditPointView
                     {
                         DataContext = vm
@@ -93,7 +93,7 @@
                 case LineModel line:
                 {
                     var vm = new LineViewModel(line);
-                    var window = new EditLineView()
+                    var window = new EditLineView
                     {
                         DataContext = vm
                     };

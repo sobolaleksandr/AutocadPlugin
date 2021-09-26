@@ -82,6 +82,10 @@
                      view:DialogResultButton.DialogResult="True" Command="{Binding OpenPaletteCommand}"
                      CommandParameter="{Binding}" />
         </Grid>
+        <Button Grid.Row="2" Height="25" Margin="5" Padding="15,0,15,0" Content="Восстановить"
+                HorizontalAlignment="Left"
+                view:DialogResultButton.DialogResult="True"
+                Command="{Binding RestoreCommand}" CommandParameter="{Binding}" />
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Height="25" Margin="5" Padding="15,0,15,0" Content="Принять"
                     view:DialogResultButton.DialogResult="True" Command="{Binding ApplyCommand}"

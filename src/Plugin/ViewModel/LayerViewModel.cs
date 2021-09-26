@@ -3,6 +3,7 @@
     using System;
     using System.ComponentModel;
 
+    using ACADPlugin.Command;
     using ACADPlugin.Model;
 
     using Autodesk.AutoCAD.Colors;

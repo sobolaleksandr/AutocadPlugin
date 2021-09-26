@@ -3,30 +3,65 @@
     using System.ComponentModel;
     using System.Globalization;
 
-    using Autodesk.AutoCAD.Geometry;
+    using ACADPlugin.Model;
+
+    using Autodesk.AutoCAD.DatabaseServices;
 
     /// <summary>
     /// Вью-модель точки.
     /// </summary>
     public class PointViewModel : ViewModelBase, IDataErrorInfo
     {
+        /// <summary>
+        /// Поле свойства <see cref="X"/>.
+        /// </summary>
         private string _x;
+
+        /// <summary>
+        /// Поле свойства <see cref="Y"/>.
+        /// </summary>
         private string _y;
+
+        /// <summary>
+        /// Поле свойства <see cref="Z"/>.
+        /// </summary>
         private string _z;
 
         /// <summary>
         /// Вью-модель точки.
         /// </summary>
-        public PointViewModel(Point3d point)
+        public PointViewModel(PointModel point)
         {
-            X = point.X.ToString("0.00", new CultureInfo("en-US"));
-            Y = point.Y.ToString("0.00", new CultureInfo("en-US"));
-            Z = point.Z.ToString("0.00", new CultureInfo("en-US"));
+            Point = point.Point;
+            var position = point.Position;
+            X = position.X.ToString("0.00", new CultureInfo("en-US"));
+            Y = position.Y.ToString("0.00", new CultureInfo("en-US"));
+            Z = position.Z.ToString("0.00", new CultureInfo("en-US"));
         }
 
+        /// <summary>
+        /// Ссылка на объект чертежа.
+        /// </summary>
+        public DBPoint Point { get; }
+
+        /// <summary>
+        /// Наименование атрибута <see cref="X"/>.
+        /// </summary>
         public static string TitleX => "X-координата точки";
+
+        /// <summary>
+        /// Наименование атрибута <see cref="Y"/>.
+        /// </summary>
         public static string TitleY => "Y-координата точки";
+
+        /// <summary>
+        /// Наименование атрибута <see cref="Z"/>.
+        /// </summary>
         public static string TitleZ => "Z-координата точки";
+
+        /// <summary>
+        /// Наименование окна.
+        /// </summary>
         public static string WindowTitle => "Точка";
 
         /// <summary>

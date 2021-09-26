@@ -23,6 +23,8 @@
             EditCommand = new EditCommand();
         }
 
+        public abstract void Commit();
+
         /// <summary>
         /// Команда изменения примитива.
         /// </summary>

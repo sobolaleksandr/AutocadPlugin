@@ -5,6 +5,8 @@
 
     using ACADPlugin.Model;
 
+    using Autodesk.AutoCAD.DatabaseServices;
+
     public class CircleViewModel : ViewModelBase, IDataErrorInfo
     {
         private string _radius;
@@ -14,11 +16,17 @@
 
         public CircleViewModel(CircleModel circle)
         {
+            Circle = circle._circle;
             Radius = circle.Radius.ToString("0.00", new CultureInfo("en-US"));
             X = circle.Center.X.ToString("0.00", new CultureInfo("en-US"));
             Y = circle.Center.Y.ToString("0.00", new CultureInfo("en-US"));
             Z = circle.Center.Z.ToString("0.00", new CultureInfo("en-US"));
         }
+
+        /// <summary>
+        /// Ссылка на объект чертежа.
+        /// </summary>
+        public Circle Circle { get; set; }
 
         public string Radius
         {

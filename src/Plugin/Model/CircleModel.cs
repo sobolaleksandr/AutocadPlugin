@@ -1,9 +1,7 @@
 ﻿namespace ACADPlugin.Model
 {
+    using System;
     using System.Globalization;
-
-    using ACADPlugin.Utilities;
-    using ACADPlugin.ViewModel;
 
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
@@ -13,11 +11,6 @@
     /// </summary>
     public class CircleModel : GeometryModel
     {
-        /// <summary>
-        /// Ссылка на объект чертежа.
-        /// </summary>
-        private readonly Circle _circle;
-
         /// <summary>
         /// Модель окружности.
         /// </summary>
@@ -29,15 +22,17 @@
         }
 
         /// <summary>
+        /// Ссылка на объект чертежа.
+        /// </summary>
+        public Circle _circle { get; set; }
+
+        /// <summary>
         /// Координаты центра окружности.
         /// </summary>
         public Point3d Center
         {
             get => _circle.Center;
-            set
-            {
-                _circle.Center = value;
-            }
+            set => _circle.Center = value;
         }
 
         /// <summary>
@@ -46,20 +41,23 @@
         public double Radius
         {
             get => _circle.Radius;
-            set
-            {
-                _circle.Radius = value;
-            }
+            set => _circle.Radius = value;
+        }
+
+        public override void Commit()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override string GetInformation()
+        {
+            return
+                $@"{Radius.ToString("0.00", new CultureInfo("en-US"))} {Center.ToString("0.00", new CultureInfo("en-US"))}";
         }
 
         protected override string GetTypeName()
         {
             return "Окружность";
-        }
-
-        protected override string GetInformation()
-        {
-            return $@"{Radius.ToString("0.00", new CultureInfo("en-US"))} {Center.ToString("0.00", new CultureInfo("en-US"))}";
         }
     }
 }

@@ -13,7 +13,7 @@
         /// <summary>
         /// Ссылка на объект чертежа.
         /// </summary>
-        private readonly DBPoint _point;
+        public DBPoint Point { get; }
 
         /// <summary>
         /// Модель точки.
@@ -21,17 +21,23 @@
         /// <param name="point"> Точка. </param>
         public PointModel(DBPoint point)
         {
-            _point = point;
+            Point = point;
             LayerId = point.LayerId;
+            Position = point.Position;
         }
 
         /// <summary>
         /// Позиция точки.
         /// </summary>
-        public Point3d Position
+        public Point3d Position { get; set; }
+        //{
+        //    get => _point.Position;
+        //    set => _point.Position = value;
+        //}
+
+        public override void Commit()
         {
-            get => _point.Position;
-            set => _point.Position = value;
+            Point.Position = Position;
         }
 
         protected override string GetInformation()

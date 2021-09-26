@@ -61,7 +61,15 @@
                     };
 
                     if (DialogUtilities.ShowDialog(window) == true)
+                    {
+                        var layerModels = drawing.Layers.Where(layer => layer.Geometries != null).ToList();
+                        var geometries = layerModels.SelectMany(layer => layer.Geometries.Where(geometry => geometry.IsChanged)).ToList();
+                        foreach (var geometry in geometries)
+                        {
+                            geometry.Commit();
+                        }
                         transaction.Commit();
+                    }
 
                     LockLayers(database);
                 }

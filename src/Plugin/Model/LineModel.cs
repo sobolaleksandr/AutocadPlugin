@@ -58,6 +58,11 @@
             return "Отрезок";
         }
 
+        public override void Commit()
+        {
+            throw new NotImplementedException();
+        }
+
         protected override string GetInformation()
         {
             return $@"{StartPoint.ToString("0.00", new CultureInfo("en-US"))} {EndPoint.ToString("0.00", new CultureInfo("en-US"))}";

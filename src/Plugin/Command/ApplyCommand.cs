@@ -4,8 +4,6 @@
     using System.ComponentModel;
     using System.Windows.Input;
 
-    using ACADPlugin.ViewModel;
-
     public class ApplyCommand : ICommand
     {
         public bool CanExecute(object parameter)
@@ -16,16 +14,15 @@
             return false;
         }
 
+        public event EventHandler CanExecuteChanged;
+
         public void Execute(object parameter)
         {
-            
         }
 
         public void RaiseCanExecuteChanged()
         {
             CanExecuteChanged?.Invoke(this, new EventArgs());
         }
-
-        public event EventHandler CanExecuteChanged;
     }
 }

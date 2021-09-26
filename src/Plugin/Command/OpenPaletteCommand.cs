@@ -1,8 +1,10 @@
-﻿namespace ACADPlugin.ViewModel
+﻿namespace ACADPlugin.Command
 {
     using System;
     using System.Windows.Forms;
     using System.Windows.Input;
+
+    using ACADPlugin.ViewModel;
 
     using Autodesk.AutoCAD.Colors;
 
@@ -12,10 +14,10 @@
     {
         public bool CanExecute(object parameter)
         {
-            return true;
+            return true; // Оставил такую реализацию
         }
 
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler CanExecuteChanged; // Не использовал
 
         public void Execute(object parameter)
         {

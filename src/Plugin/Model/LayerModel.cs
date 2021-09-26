@@ -71,6 +71,11 @@
                 Geometries = new List<GeometryModel> { geometry };
         }
 
+        public override void Commit()
+        {
+            throw new NotImplementedException();
+        }
+
         protected override string GetInformation()
         {
             throw new NotImplementedException();

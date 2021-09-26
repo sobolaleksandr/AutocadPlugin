@@ -1,7 +1,9 @@
 ﻿namespace ACADPlugin.ViewModel
 {
     using System.ComponentModel;
+    using System.Runtime.CompilerServices;
 
+    using ACADPlugin.Annotations;
     using ACADPlugin.Command;
 
     /// <summary>
@@ -9,22 +11,24 @@
     /// </summary>
     public abstract class ViewModelBase : INotifyPropertyChanged
     {
-        protected string ValidateDouble(string value, string error, string title)
-        {
-            if (!double.TryParse(value, out _))
-            {
-                error = $@"В поле '{title}' должно быть число!";
-            }
-
-            return error;
-        }
-
+        /// <summary>
+        /// Базовый класс для моделей представления.
+        /// </summary>
         protected ViewModelBase()
         {
             ApplyCommand = new ApplyCommand();
+            RestoreCommand = new RestoreCommand();
         }
 
+        /// <summary>
+        /// Команда принятия изменений примитива.
+        /// </summary>
         public ApplyCommand ApplyCommand { get; set; }
+
+        /// <summary>
+        /// Команда восстановления примитива.
+        /// </summary>
+        public RestoreCommand RestoreCommand { get; set; }
 
         /// <summary>
         /// Событие, генерируемое при изменении свойств.
@@ -34,6 +38,19 @@
         /// <summary>
         /// Метод генерации события при изменении определенного свойства.
         /// </summary>
-        protected void OnPropertyChanged() => ApplyCommand.RaiseCanExecuteChanged();
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            ApplyCommand.RaiseCanExecuteChanged();
+        }
+
+        protected string ValidateDouble(string value, string error, string title)
+        {
+            if (!double.TryParse(value, out _))
+                error = $@"В поле '{title}' должно быть число!";
+
+            return error;
+        }
     }
 }
