@@ -83,7 +83,7 @@
                     if (DialogUtilities.ShowDialog(window) == true)
                     {
                         layer.IsChanged = true;
-                        layer.IsOff = vm.Visibility;
+                        layer.Visibility = vm.Visibility;
                         layer.Name = vm.Name;
                         layer.Color = vm.LayerColor;
                     }
@@ -101,9 +101,9 @@
                     if (DialogUtilities.ShowDialog(window) == true)
                     {
                         line.IsChanged = true;
-                        var startX = double.Parse(vm.StartY);
+                        var startX = double.Parse(vm.StartX);
                         var startY = double.Parse(vm.StartY);
-                        var endX = double.Parse(vm.EndY);
+                        var endX = double.Parse(vm.EndX);
                         var endY = double.Parse(vm.EndY);
                         var height = double.Parse(vm.Height);
                         line.StartPoint = new Point3d(startX, startY, height);

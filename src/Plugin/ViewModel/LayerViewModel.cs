@@ -7,24 +7,44 @@
     using ACADPlugin.Model;
 
     using Autodesk.AutoCAD.Colors;
+    using Autodesk.AutoCAD.DatabaseServices;
 
     /// <summary>
     /// Вью-модель слоя.
     /// </summary>
     public class LayerViewModel : ViewModelBase, IDataErrorInfo
     {
+        /// <summary>
+        /// Поле свойства <see cref="LayerColor"/>.
+        /// </summary>
         private Color _layerColor;
+
+        /// <summary>
+        /// Поле свойства <see cref="Name"/>.
+        /// </summary>
         private string _name;
+
+        /// <summary>
+        /// Поле свойства <see cref="Visibility"/>.
+        /// </summary>
         private bool _visibility;
 
+        /// <summary>
+        /// Вью-модель слоя.
+        /// </summary>
+        /// <param name="layer"> Модель слоя. </param>
         public LayerViewModel(LayerModel layer)
         {
-            Visibility = layer.IsOff;
+            Layer = layer.Layer;
+            Visibility = layer.Visibility;
             LayerColor = layer.Color;
             Name = layer.Name;
             OpenPaletteCommand = new OpenPaletteCommand();
         }
 
+        /// <summary>
+        /// Наименование атрибута <see cref="LayerColor"/>.
+        /// </summary>
         public static string ColorTitle => "Цвет слоя";
 
         /// <summary>
@@ -32,6 +52,14 @@
         /// </summary>
         public bool IsEditable => !Name.Equals("0", StringComparison.CurrentCultureIgnoreCase);
 
+        /// <summary>
+        /// Ссылка на объект чертежа.
+        /// </summary>
+        public LayerTableRecord Layer { get; }
+
+        /// <summary>
+        /// Цвет слоя.
+        /// </summary>
         public Color LayerColor
         {
             get => _layerColor;
@@ -42,6 +70,9 @@
             }
         }
 
+        /// <summary>
+        /// Наименование слоя.
+        /// </summary>
         public string Name
         {
             get => _name;
@@ -52,8 +83,14 @@
             }
         }
 
+        /// <summary>
+        /// Наименование атрибута <see cref="Name"/>.
+        /// </summary>
         public string NameTitle => IsEditable ? "Наименование слоя" : "Нельзя редактировать этот слой!";
 
+        /// <summary>
+        /// Команда открытия цветовой палитры.
+        /// </summary>
         public OpenPaletteCommand OpenPaletteCommand { get; set; }
 
         /// <summary>
@@ -69,6 +106,14 @@
             }
         }
 
+        /// <summary>
+        /// Заголовок окна.
+        /// </summary>
+        public static string WindowTitle => "Слой";
+
+        /// <summary>
+        /// Наименование атрибута <see cref="Visibility"/>.
+        /// </summary>
         public static string VisibilityTitle => "Видимость слоя";
 
         public string Error => this[nameof(Name)];

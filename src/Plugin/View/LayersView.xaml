@@ -55,7 +55,7 @@
                                                         </StackPanel>
 
                                                         <Button Style="{StaticResource ButtonStyle}"
-                                                                Content="..."
+                                                                Content="Редактировать"
                                                                 Command="{Binding EditCommand}"
                                                                 CommandParameter="{Binding}" />
                                                     </StackPanel>
@@ -75,14 +75,6 @@
         <StackPanel Grid.Row="1" Grid.Column="0" Height="Auto" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Style="{StaticResource ButtonStyle}" Content="Применить изменения"
                     view:DialogResultButton.DialogResult="True" />
-            <Button Style="{StaticResource ButtonStyle}"
-                    Content="Редактировать"
-                    Command="{Binding EditCommand}"
-                    CommandParameter="{Binding}" />
-            <Button Style="{StaticResource ButtonStyle}"
-                    Content="Отменить изменения"
-                    Command="{Binding EditCommand}"
-                    CommandParameter="{Binding}" />
             <Button Style="{StaticResource ButtonStyle}" Content="Отменить"
                     view:DialogResultButton.DialogResult="False" />
         </StackPanel>

@@ -30,6 +30,7 @@
         /// <summary>
         /// Вью-модель точки.
         /// </summary>
+        /// <param name="point"> Модель точки. </param>
         public PointViewModel(PointModel point)
         {
             Point = point.Point;
@@ -60,7 +61,7 @@
         public static string TitleZ => "Z-координата точки";
 
         /// <summary>
-        /// Наименование окна.
+        /// Заголовок окна.
         /// </summary>
         public static string WindowTitle => "Точка";
 

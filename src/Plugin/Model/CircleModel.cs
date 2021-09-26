@@ -1,6 +1,5 @@
 ﻿namespace ACADPlugin.Model
 {
-    using System;
     using System.Globalization;
 
     using Autodesk.AutoCAD.DatabaseServices;
@@ -17,36 +16,31 @@
         /// <param name="circle"> Окружность. </param>
         public CircleModel(Circle circle)
         {
-            _circle = circle;
+            Circle = circle;
             LayerId = circle.LayerId;
+            Center = circle.Center;
+            Radius = circle.Radius;
         }
-
-        /// <summary>
-        /// Ссылка на объект чертежа.
-        /// </summary>
-        public Circle _circle { get; set; }
 
         /// <summary>
         /// Координаты центра окружности.
         /// </summary>
-        public Point3d Center
-        {
-            get => _circle.Center;
-            set => _circle.Center = value;
-        }
+        public Point3d Center { get; set; }
+
+        /// <summary>
+        /// Ссылка на объект чертежа.
+        /// </summary>
+        public Circle Circle { get; }
 
         /// <summary>
         /// Радиус окружности.
         /// </summary>
-        public double Radius
-        {
-            get => _circle.Radius;
-            set => _circle.Radius = value;
-        }
+        public double Radius { get; set; }
 
         public override void Commit()
         {
-            throw new NotImplementedException();
+            Circle.Radius = Radius;
+            Circle.Center = Center;
         }
 
         protected override string GetInformation()

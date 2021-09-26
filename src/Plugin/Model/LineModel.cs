@@ -1,10 +1,6 @@
 ﻿namespace ACADPlugin.Model
 {
-    using System;
     using System.Globalization;
-
-    using ACADPlugin.Utilities;
-    using ACADPlugin.ViewModel;
 
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
@@ -15,57 +11,47 @@
     public class LineModel : GeometryModel
     {
         /// <summary>
-        /// Ссылка на объект чертежа.
-        /// </summary>
-        private readonly Line _line;
-
-        /// <summary>
         /// Модель отрезка.
         /// </summary>
         /// <param name="line"> Отрезок. </param>
         public LineModel(Line line)
         {
-            _line = line;
+            Line = line;
             LayerId = line.LayerId;
+            EndPoint = line.EndPoint;
+            StartPoint = line.StartPoint;
         }
 
         /// <summary>
         /// Конечная точка отрезка.
         /// </summary>
-        public Point3d EndPoint
-        {
-            get => _line.EndPoint;
-            set
-            {
-                _line.EndPoint = value;
-            }
-        }
+        public Point3d EndPoint { get; set; }
+
+        /// <summary>
+        /// Ссылка на объект чертежа.
+        /// </summary>
+        public Line Line { get; }
 
         /// <summary>
         /// Начальная точка отрезка.
         /// </summary>
-        public Point3d StartPoint
+        public Point3d StartPoint { get; set; }
+
+        public override void Commit()
         {
-            get => _line.StartPoint;
-            set
-            {
-                _line.StartPoint = value;
-            }
+            Line.StartPoint = StartPoint;
+            Line.EndPoint = EndPoint;
+        }
+
+        protected override string GetInformation()
+        {
+            return
+                $@"{StartPoint.ToString("0.00", new CultureInfo("en-US"))} {EndPoint.ToString("0.00", new CultureInfo("en-US"))}";
         }
 
         protected override string GetTypeName()
         {
             return "Отрезок";
-        }
-
-        public override void Commit()
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override string GetInformation()
-        {
-            return $@"{StartPoint.ToString("0.00", new CultureInfo("en-US"))} {EndPoint.ToString("0.00", new CultureInfo("en-US"))}";
         }
     }
 }

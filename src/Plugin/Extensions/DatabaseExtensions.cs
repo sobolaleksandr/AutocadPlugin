@@ -27,6 +27,16 @@
         }
 
         /// <summary>
+        /// Запустить транзакцию.
+        /// </summary>
+        /// <param name="database">База чертежа.</param>
+        /// <returns>Возвращает созданную транзакцию.</returns>
+        public static Transaction StartTransaction(this Database database)
+        {
+            return database.TransactionManager.StartTransaction();
+        }
+
+        /// <summary>
         /// Получить идентификаторы всех объектов чертежа.
         /// </summary>
         /// <param name="database">База чертежа.</param>
@@ -50,16 +60,6 @@
         {
             var bt = (BlockTable)transaction.GetObject(database.BlockTableId, OpenMode.ForRead);
             return (BlockTableRecord)transaction.GetObject(bt[BlockTableRecord.ModelSpace], openMode);
-        }
-
-        /// <summary>
-        /// Запустить транзакцию.
-        /// </summary>
-        /// <param name="database">База чертежа.</param>
-        /// <returns>Возвращает созданную транзакцию.</returns>
-        public static Transaction StartTransaction(this Database database)
-        {
-            return database.TransactionManager.StartTransaction();
         }
     }
 }

@@ -11,11 +11,6 @@
     public class PointModel : GeometryModel
     {
         /// <summary>
-        /// Ссылка на объект чертежа.
-        /// </summary>
-        public DBPoint Point { get; }
-
-        /// <summary>
         /// Модель точки.
         /// </summary>
         /// <param name="point"> Точка. </param>
@@ -27,13 +22,14 @@
         }
 
         /// <summary>
+        /// Ссылка на объект чертежа.
+        /// </summary>
+        public DBPoint Point { get; }
+
+        /// <summary>
         /// Позиция точки.
         /// </summary>
         public Point3d Position { get; set; }
-        //{
-        //    get => _point.Position;
-        //    set => _point.Position = value;
-        //}
 
         public override void Commit()
         {

@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
 
     using Autodesk.AutoCAD.Colors;
     using Autodesk.AutoCAD.DatabaseServices;
@@ -13,27 +12,21 @@
     public class LayerModel : GeometryModel
     {
         /// <summary>
-        /// Ссылка на объект чертежа.
-        /// </summary>
-        private readonly LayerTableRecord _layer;
-
-        /// <summary>
         /// Модель слоя.
         /// </summary>
         /// <param name="layer"> Слой. </param>
         public LayerModel(LayerTableRecord layer)
         {
-            _layer = layer;
+            Layer = layer;
+            Color = layer.Color;
+            Name = layer.Name;
+            Visibility = !layer.IsOff;
         }
 
         /// <summary>
         /// Цвет слоя.
         /// </summary>
-        public Color Color
-        {
-            get => _layer.Color;
-            set => _layer.Color = value;
-        }
+        public Color Color { get; set; }
 
         /// <summary>
         /// Примитивы в слое.
@@ -43,26 +36,27 @@
         /// <summary>
         /// Идентификатор слоя.
         /// </summary>
-        public ObjectId Id => _layer.Id;
+        public ObjectId Id => Layer.Id;
 
         /// <summary>
-        /// Видимость слоя.
+        /// Ссылка на объект чертежа.
         /// </summary>
-        public bool IsOff
-        {
-            get => !_layer.IsOff;
-            set => _layer.IsOff = !value;
-        }
+        public LayerTableRecord Layer { get; }
 
         /// <summary>
         /// Наименование слоя
         /// </summary>
-        public string Name
-        {
-            get => _layer.Name;
-            set => _layer.Name = value;
-        }
+        public string Name { get; set; }
 
+        /// <summary>
+        /// Видимость слоя.
+        /// </summary>
+        public bool Visibility { get; set; }
+
+        /// <summary>
+        /// Добавить примитив в список объектов слоя.
+        /// </summary>
+        /// <param name="geometry"> Примитив. </param>
         public void AddEntity(GeometryModel geometry)
         {
             if (Geometries != null)
@@ -73,21 +67,23 @@
 
         public override void Commit()
         {
-            throw new NotImplementedException();
+            Layer.Name = Name;
+            Layer.Color = Color;
+            Layer.IsOff = !Visibility;
         }
 
         protected override string GetInformation()
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException("Неподдерживаемая функция!");
         }
 
         protected override string GetTypeName()
         {
-            var str = "виден";
-            if (_layer.IsOff)
-                str = "отключен";
+            var visibility = "виден";
+            if (Layer.IsOff)
+                visibility = "скрыт";
 
-            return $"Слой {Name}, {_layer.Color} {str}";
+            return $"Слой {Name}, {visibility}";
         }
     }
 }

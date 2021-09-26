@@ -3,8 +3,8 @@
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
 
-    using ACADPlugin.Annotations;
     using ACADPlugin.Command;
+    using ACADPlugin.Properties;
 
     using Autodesk.AutoCAD.DatabaseServices;
 
@@ -13,6 +13,9 @@
     /// </summary>
     public abstract class GeometryModel : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Поле свойства <see cref="IsChanged"/>.
+        /// </summary>
         private bool _isChanged;
 
         /// <summary>
@@ -23,15 +26,19 @@
             EditCommand = new EditCommand();
         }
 
-        public abstract void Commit();
-
         /// <summary>
         /// Команда изменения примитива.
         /// </summary>
         public EditCommand EditCommand { get; set; }
 
+        /// <summary>
+        /// Информация о примитиве.
+        /// </summary>
         public string Information => GetInformation();
 
+        /// <summary>
+        /// Примитив изменен.
+        /// </summary>
         public bool IsChanged
         {
             get => _isChanged;
@@ -54,6 +61,15 @@
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Подтвердить изменения примитива.
+        /// </summary>
+        public abstract void Commit();
+
+        /// <summary>
+        /// Функция получения информации о примитиве.
+        /// </summary>
+        /// <returns> Возращает информацию о примитиве. </returns>
         protected abstract string GetInformation();
 
         /// <summary>

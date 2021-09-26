@@ -7,16 +7,38 @@
 
     using Autodesk.AutoCAD.DatabaseServices;
 
+    /// <summary>
+    /// Вью-модель окружности.
+    /// </summary>
     public class CircleViewModel : ViewModelBase, IDataErrorInfo
     {
+        /// <summary>
+        /// Поле свойства <see cref="Radius"/>.
+        /// </summary>
         private string _radius;
+
+        /// <summary>
+        /// Поле свойства <see cref="X"/>.
+        /// </summary>
         private string _x;
+
+        /// <summary>
+        /// Поле свойства <see cref="Y"/>.
+        /// </summary>
         private string _y;
+
+        /// <summary>
+        /// Поле свойства <see cref="Z"/>.
+        /// </summary>
         private string _z;
 
+        /// <summary>
+        /// Вью-модель окружности.
+        /// </summary>
+        /// <param name="circle"> Модель окружности. </param>
         public CircleViewModel(CircleModel circle)
         {
-            Circle = circle._circle;
+            Circle = circle.Circle;
             Radius = circle.Radius.ToString("0.00", new CultureInfo("en-US"));
             X = circle.Center.X.ToString("0.00", new CultureInfo("en-US"));
             Y = circle.Center.Y.ToString("0.00", new CultureInfo("en-US"));
@@ -26,8 +48,11 @@
         /// <summary>
         /// Ссылка на объект чертежа.
         /// </summary>
-        public Circle Circle { get; set; }
+        public Circle Circle { get; }
 
+        /// <summary>
+        /// Радиус окружности.
+        /// </summary>
         public string Radius
         {
             get => _radius;
@@ -38,14 +63,33 @@
             }
         }
 
+        /// <summary>
+        /// Наименование атрибута <see cref="Radius"/>.
+        /// </summary>
         public static string TitleRadius => "Радиус окружности";
+
+        /// <summary>
+        /// Наименование атрибута <see cref="X"/>.
+        /// </summary>
         public static string TitleX => "X-координата центра окружности";
+
+        /// <summary>
+        /// Наименование атрибута <see cref="Y"/>.
+        /// </summary>
         public static string TitleY => "Y-координата центра окружности";
+
+        /// <summary>
+        /// Наименование атрибута <see cref="Z"/>.
+        /// </summary>
         public static string TitleZ => "Z-координата центра окружности";
+
+        /// <summary>
+        /// Заголовок окна.
+        /// </summary>
         public static string WindowTitle => "Окружность";
 
         /// <summary>
-        /// X-координата точки.
+        /// X-координата окружности.
         /// </summary>
         public string X
         {
@@ -58,7 +102,7 @@
         }
 
         /// <summary>
-        /// Y-координата точки.
+        /// Y-координата окружности.
         /// </summary>
         public string Y
         {
@@ -71,7 +115,7 @@
         }
 
         /// <summary>
-        /// Z-координата точки.
+        /// Z-координата окружности.
         /// </summary>
         public string Z
         {

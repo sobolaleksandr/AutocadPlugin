@@ -1,23 +1,18 @@
 ﻿namespace ACADPlugin
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Windows.Forms;
+    using System.Windows;
 
     using ACADPlugin.Extensions;
     using ACADPlugin.Model;
     using ACADPlugin.Utilities;
     using ACADPlugin.View;
 
-    using Autodesk.AutoCAD.Colors;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Runtime;
 
     using Application = Autodesk.AutoCAD.ApplicationServices.Core.Application;
-    using ColorDialog = Autodesk.AutoCAD.Windows.ColorDialog;
-    using Exception = Autodesk.AutoCAD.Runtime.Exception;
-    using MessageBox = System.Windows.MessageBox;
 
     /// <summary>
     /// Плагин для AutoCad
@@ -62,12 +57,21 @@
 
                     if (DialogUtilities.ShowDialog(window) == true)
                     {
+                        var changedLayers = drawing.Layers.Where(layer => layer.IsChanged).ToList();
+                        foreach (var layer in changedLayers)
+                        {
+                            layer.Commit();
+                        }
+
                         var layerModels = drawing.Layers.Where(layer => layer.Geometries != null).ToList();
-                        var geometries = layerModels.SelectMany(layer => layer.Geometries.Where(geometry => geometry.IsChanged)).ToList();
+                        var geometries = layerModels
+                            .SelectMany(layer => layer.Geometries.Where(geometry => geometry.IsChanged)).ToList();
+
                         foreach (var geometry in geometries)
                         {
                             geometry.Commit();
                         }
+
                         transaction.Commit();
                     }
 

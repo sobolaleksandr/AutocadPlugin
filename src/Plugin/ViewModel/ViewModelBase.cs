@@ -3,8 +3,8 @@
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
 
-    using ACADPlugin.Annotations;
     using ACADPlugin.Command;
+    using ACADPlugin.Properties;
 
     /// <summary>
     /// Базовый класс для моделей представления.

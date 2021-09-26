@@ -36,6 +36,9 @@
                     circleVM.Radius = circleVM.Circle.Radius.ToString("0.00", new CultureInfo("en-US"));
                     break;
                 case LayerViewModel layerVM:
+                    layerVM.Name = layerVM.Layer.Name;
+                    layerVM.LayerColor = layerVM.Layer.Color;
+                    layerVM.Visibility = !layerVM.Layer.IsOff;
                     break;
                 case PointViewModel pointVM:
                     pointVM.X = pointVM.Point.Position.X.ToString("0.00", new CultureInfo("en-US"));
@@ -43,6 +46,13 @@
                     pointVM.Z = pointVM.Point.Position.Z.ToString("0.00", new CultureInfo("en-US"));
                     break;
                 case LineViewModel lineVM:
+                    var startPoint = lineVM.Line.StartPoint;
+                    lineVM.StartX = startPoint.X.ToString("0.00", new CultureInfo("en-US"));
+                    lineVM.StartY = startPoint.Y.ToString("0.00", new CultureInfo("en-US"));
+                    var endPoint = lineVM.Line.EndPoint;
+                    lineVM.EndX = endPoint.X.ToString("0.00", new CultureInfo("en-US"));
+                    lineVM.EndY = endPoint.Y.ToString("0.00", new CultureInfo("en-US"));
+                    lineVM.Height = Math.Min(startPoint.Z, endPoint.Z).ToString("0.00", new CultureInfo("en-US"));
                     break;
             }
         }
