@@ -100,7 +100,7 @@
         public override void SetTypeName()
         {
             var visibility = "виден";
-            if (Layer.IsOff)
+            if (!Visibility)
                 visibility = "скрыт";
 
             Type = $"Слой {Name}, {visibility}";
