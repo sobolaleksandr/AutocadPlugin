@@ -1,7 +1,5 @@
 ﻿namespace ACADPlugin.Model
 {
-    using System.Globalization;
-
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
 
@@ -20,6 +18,8 @@
             LayerId = circle.LayerId;
             Center = circle.Center;
             Radius = circle.Radius;
+            SetInformation();
+            SetTypeName();
         }
 
         /// <summary>
@@ -43,15 +43,15 @@
             Circle.Center = Center;
         }
 
-        protected override string GetInformation()
+        public sealed override void SetInformation()
         {
-            return
-                $@"{Radius.ToString("0.00", new CultureInfo("en-US"))} {Center.ToString("0.00", new CultureInfo("en-US"))}";
+            Information =
+                $@"Радиус - {Radius.ToString(FORMAT, CultureInfo)}, Центр - {Center.ToString(FORMAT, CultureInfo)}";
         }
 
-        protected override string GetTypeName()
+        public sealed override void SetTypeName()
         {
-            return "Окружность";
+            Type = "Окружность";
         }
     }
 }

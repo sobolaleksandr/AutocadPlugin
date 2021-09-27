@@ -13,6 +13,7 @@
             <Setter Property="Height" Value="25" />
             <Setter Property="Margin" Value="5" />
             <Setter Property="Padding" Value="15,0,15,0" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
         </Style>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </Window.Resources>
@@ -28,7 +29,8 @@
                         <HierarchicalDataTemplate>
                             <StackPanel>
                                 <StackPanel Orientation="Horizontal">
-                                    <Label Content="{Binding Type}" VerticalAlignment="Center" />
+                                    <Label Content="{Binding Type, Mode=TwoWay}" VerticalAlignment="Center" />
+                                    <Rectangle Fill="{Binding Brush}" Width="15" Height="15" Stroke="Black"></Rectangle>
                                     <Label
                                         Visibility="{Binding IsChanged, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}"
                                         Content="Изменено" VerticalAlignment="Center" />
@@ -37,7 +39,8 @@
                                 <Button Style="{StaticResource ButtonStyle}"
                                         Content="Редактировать"
                                         Command="{Binding EditCommand}"
-                                        CommandParameter="{Binding}" />
+                                        CommandParameter="{Binding}"
+                                        Width="120" />
 
                                 <TreeViewItem ItemsSource="{Binding Geometries}"
                                               d:DataContext="{d:DesignInstance model:LayerModel}">
@@ -46,18 +49,19 @@
                                             <StackPanel>
                                                 <TreeViewItem Header="{Binding Type}">
                                                     <StackPanel Orientation="Vertical">
-                                                        <StackPanel Orientation="Horizontal">
-                                                            <Label Content="{Binding Information}"
+                                                        <StackPanel Orientation="Vertical">
+                                                            <Label Content="{Binding Information, Mode=TwoWay}"
                                                                    VerticalAlignment="Center" />
                                                             <Label
                                                                 Visibility="{Binding IsChanged, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}"
                                                                 Content="Изменено" VerticalAlignment="Center" />
-                                                        </StackPanel>
 
-                                                        <Button Style="{StaticResource ButtonStyle}"
-                                                                Content="Редактировать"
-                                                                Command="{Binding EditCommand}"
-                                                                CommandParameter="{Binding}" />
+                                                            <Button Style="{StaticResource ButtonStyle}"
+                                                                    Content="Редактировать"
+                                                                    Command="{Binding EditCommand}"
+                                                                    CommandParameter="{Binding}" 
+                                                                    Width="120"/>
+                                                        </StackPanel>
                                                     </StackPanel>
                                                 </TreeViewItem>
                                             </StackPanel>
@@ -72,62 +76,14 @@
                 </TreeViewItem>
             </TreeView>
         </ScrollViewer>
-        <StackPanel Grid.Row="1" Grid.Column="0" Height="Auto" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Style="{StaticResource ButtonStyle}" Content="Применить изменения"
-                    view:DialogResultButton.DialogResult="True" />
-            <Button Style="{StaticResource ButtonStyle}" Content="Отменить"
-                    view:DialogResultButton.DialogResult="False" />
-        </StackPanel>
+        <Border Grid.Row="1" Grid.Column="0" BorderBrush="Gray" Background="LightGray" BorderThickness="2">
+            <StackPanel  Height="Auto" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Style="{StaticResource ButtonStyle}" Content="Применить изменения" Command="{Binding CommitCommand}"
+                        view:DialogResultButton.DialogResult="True" />
+                <Button Style="{StaticResource ButtonStyle}" Content="Отменить"
+                        view:DialogResultButton.DialogResult="False" />
+            </StackPanel>
+        </Border>
+        
     </Grid>
-    <!--<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-    <StackPanel Height="Auto" Width="Auto">
-        <DataGrid Height="Auto"
-                  CanUserAddRows="False"
-                  IsReadOnly="True"
-                  AutoGenerateColumns="False"
-                  ItemsSource="{Binding Layers}">
-            <DataGrid.Columns>
-                <DataGridTemplateColumn>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Vertical"
-                                        d:DataContext="{d:DesignInstance Type=model:LayerModel,  IsDesignTimeCreatable=False }">
-                                <DataGrid Height="Auto"
-                                          CanUserAddRows="False"
-                                          IsReadOnly="True"
-                                          AutoGenerateColumns="False"
-                                          ItemsSource="{Binding Geometries}">
-                                    <DataGrid.Columns>
-                                        <DataGridTextColumn Width="Auto" MinWidth="280" Header="Наименование слоя"
-                                                            Binding="{Binding LayerName}"
-                                                            IsReadOnly="True" />
-                                        <DataGridTextColumn Width="Auto" MinWidth="280" Header="Тип объекта"
-                                                            Binding="{Binding Type}" IsReadOnly="True" />
-
-                                        <DataGridTemplateColumn Header="Действие" Width="Auto">
-                                            <DataGridTemplateColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <Button Width="Auto" MinWidth="280" Name="btnView"
-                                                            Content="Редактировать"
-                                                            Command="{Binding EditCommand}"
-                                                            CommandParameter="{Binding}" />
-                                                </DataTemplate>
-                                            </DataGridTemplateColumn.CellTemplate>
-                                        </DataGridTemplateColumn>
-                                    </DataGrid.Columns>
-                                </DataGrid>
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Height="25" Margin="5" Padding="15,0,15,0" Content="Применить изменения"
-                    view:DialogResultButton.DialogResult="True" />
-            <Button Height="25" Margin="5" Padding="15,0,15,0" Content="Отменить"
-                    view:DialogResultButton.DialogResult="False" />
-        </StackPanel>
-    </StackPanel>
-    </ScrollViewer>-->
 </Window>

@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Command\ApplyCommand.cs" />
+    <Compile Include="Command\CommitCommand.cs" />
     <Compile Include="Command\RestoreCommand.cs" />
     <Compile Include="Model\CircleModel.cs" />
     <Compile Include="Properties\Annotations.cs" />

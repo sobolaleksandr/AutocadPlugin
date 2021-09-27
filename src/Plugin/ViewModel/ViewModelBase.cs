@@ -12,6 +12,11 @@
     public abstract class ViewModelBase : INotifyPropertyChanged
     {
         /// <summary>
+        /// Поле свойства <see cref="IsChanged"/>.
+        /// </summary>
+        private bool _isChanged;
+
+        /// <summary>
         /// Базовый класс для моделей представления.
         /// </summary>
         protected ViewModelBase()
@@ -24,6 +29,19 @@
         /// Команда принятия изменений примитива.
         /// </summary>
         public ApplyCommand ApplyCommand { get; set; }
+
+        /// <summary>
+        /// Примитив изменен.
+        /// </summary>
+        public bool IsChanged
+        {
+            get => _isChanged;
+            set
+            {
+                _isChanged = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Команда восстановления примитива.

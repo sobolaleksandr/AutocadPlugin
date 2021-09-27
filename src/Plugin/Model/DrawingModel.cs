@@ -14,14 +14,19 @@
         /// </summary>
         public DrawingModel(List<LayerModel> layers)
         {
+            foreach (var layer in layers)
+            {
+                layer.DrawingModel = this;
+            }
+
             Layers = layers;
-            EditCommand = new EditCommand();
+            CommitCommand = new CommitCommand();
         }
 
         /// <summary>
-        /// Команда изменения примитива.
+        /// Команда принятия изменений чертежа.
         /// </summary>
-        public EditCommand EditCommand { get; set; }
+        public CommitCommand CommitCommand { get; set; }
 
         /// <summary>
         /// Заголовок дерева.

@@ -10,6 +10,9 @@
 
     using ColorDialog = Autodesk.AutoCAD.Windows.ColorDialog;
 
+    /// <summary>
+    /// Команда открытия цветовой палитры.
+    /// </summary>
     public class OpenPaletteCommand : ICommand
     {
         public bool CanExecute(object parameter)

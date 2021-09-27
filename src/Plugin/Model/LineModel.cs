@@ -1,7 +1,5 @@
 ﻿namespace ACADPlugin.Model
 {
-    using System.Globalization;
-
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
 
@@ -20,6 +18,8 @@
             LayerId = line.LayerId;
             EndPoint = line.EndPoint;
             StartPoint = line.StartPoint;
+            SetTypeName();
+            SetInformation();
         }
 
         /// <summary>
@@ -43,15 +43,15 @@
             Line.EndPoint = EndPoint;
         }
 
-        protected override string GetInformation()
+        public sealed override void SetInformation()
         {
-            return
-                $@"{StartPoint.ToString("0.00", new CultureInfo("en-US"))} {EndPoint.ToString("0.00", new CultureInfo("en-US"))}";
+            Information =
+                $@"Начало - {StartPoint.ToString(FORMAT, CultureInfo)}, Конец - {EndPoint.ToString(FORMAT, CultureInfo)}";
         }
 
-        protected override string GetTypeName()
+        public sealed override void SetTypeName()
         {
-            return "Отрезок";
+            Type = "Отрезок";
         }
     }
 }

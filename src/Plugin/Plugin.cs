@@ -57,21 +57,7 @@
 
                     if (DialogUtilities.ShowDialog(window) == true)
                     {
-                        var changedLayers = drawing.Layers.Where(layer => layer.IsChanged).ToList();
-                        foreach (var layer in changedLayers)
-                        {
-                            layer.Commit();
-                        }
-
-                        var layerModels = drawing.Layers.Where(layer => layer.Geometries != null).ToList();
-                        var geometries = layerModels
-                            .SelectMany(layer => layer.Geometries.Where(geometry => geometry.IsChanged)).ToList();
-
-                        foreach (var geometry in geometries)
-                        {
-                            geometry.Commit();
-                        }
-
+                        CommitDrawingChanges(drawing);
                         transaction.Commit();
                     }
 
@@ -85,6 +71,28 @@
         }
 
         /// <summary>
+        /// Принять изменения на чертеже.
+        /// </summary>
+        /// <param name="drawing"> Модель чертежа. </param>
+        private static void CommitDrawingChanges(DrawingModel drawing)
+        {
+            var changedLayers = drawing.Layers.Where(layer => layer.IsChanged).ToList();
+            foreach (var layer in changedLayers)
+            {
+                layer.Commit();
+            }
+
+            var layerModels = drawing.Layers.Where(layer => layer.Geometries != null).ToList();
+            var geometries = layerModels
+                .SelectMany(layer => layer.Geometries.Where(geometry => geometry.IsChanged)).ToList();
+
+            foreach (var geometry in geometries)
+            {
+                geometry.Commit();
+            }
+        }
+
+        /// <summary>
         /// Функция создания объекта чертежа. 
         /// </summary>
         /// <param name="objectIds"> Id-объектов на чертеже. </param>
@@ -94,6 +102,7 @@
         private static DrawingModel CreateDrawing(IEnumerable<ObjectId> objectIds, Transaction transaction,
             List<LayerModel> layers)
         {
+            var drawingModel = new DrawingModel(layers);
             foreach (var objectId in objectIds)
             {
                 var dbObject = transaction.GetObject(objectId, OpenMode.ForWrite, true, true);
@@ -102,7 +111,7 @@
                 layer?.AddEntity(geometry);
             }
 
-            return new DrawingModel(layers);
+            return drawingModel;
         }
 
         /// <summary>

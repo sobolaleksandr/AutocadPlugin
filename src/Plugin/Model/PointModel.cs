@@ -1,7 +1,5 @@
 ﻿namespace ACADPlugin.Model
 {
-    using System.Globalization;
-
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
 
@@ -19,6 +17,8 @@
             Point = point;
             LayerId = point.LayerId;
             Position = point.Position;
+            SetInformation();
+            SetTypeName();
         }
 
         /// <summary>
@@ -36,14 +36,14 @@
             Point.Position = Position;
         }
 
-        protected override string GetInformation()
+        public sealed override void SetInformation()
         {
-            return $@"{Position.ToString("0.00", new CultureInfo("en-US"))}";
+            Information = $@"{Position.ToString(FORMAT, CultureInfo)}";
         }
 
-        protected override string GetTypeName()
+        public sealed override void SetTypeName()
         {
-            return "Точка";
+            Type = "Точка";
         }
     }
 }

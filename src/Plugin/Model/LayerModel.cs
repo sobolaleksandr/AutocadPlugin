@@ -1,16 +1,22 @@
 ﻿namespace ACADPlugin.Model
 {
-    using System;
     using System.Collections.Generic;
+    using System.Windows.Media;
 
-    using Autodesk.AutoCAD.Colors;
     using Autodesk.AutoCAD.DatabaseServices;
+
+    using Color = Autodesk.AutoCAD.Colors.Color;
 
     /// <summary>
     /// Модель слоя.
     /// </summary>
-    public class LayerModel : GeometryModel
+    public sealed class LayerModel : GeometryModel
     {
+        /// <summary>
+        /// Поле свойства <see cref="Brush"/>
+        /// </summary>
+        private Brush _brush;
+
         /// <summary>
         /// Модель слоя.
         /// </summary>
@@ -21,6 +27,20 @@
             Color = layer.Color;
             Name = layer.Name;
             Visibility = !layer.IsOff;
+            SetTypeName();
+        }
+
+        /// <summary>
+        /// Отображение цвета.
+        /// </summary>
+        public Brush Brush
+        {
+            get => _brush;
+            set
+            {
+                _brush = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -59,6 +79,7 @@
         /// <param name="geometry"> Примитив. </param>
         public void AddEntity(GeometryModel geometry)
         {
+            geometry.DrawingModel = DrawingModel;
             if (Geometries != null)
                 Geometries.Add(geometry);
             else
@@ -72,18 +93,21 @@
             Layer.IsOff = !Visibility;
         }
 
-        protected override string GetInformation()
+        public override void SetInformation()
         {
-            throw new NotSupportedException("Неподдерживаемая функция!");
         }
 
-        protected override string GetTypeName()
+        public override void SetTypeName()
         {
             var visibility = "виден";
             if (Layer.IsOff)
                 visibility = "скрыт";
 
-            return $"Слой {Name}, {visibility}";
+            Type = $"Слой {Name}, {visibility}";
+
+            var cadColor = Color.ColorValue;
+            var color = System.Windows.Media.Color.FromRgb(cadColor.R, cadColor.G, cadColor.B);
+            Brush = new SolidColorBrush(color);
         }
     }
 }

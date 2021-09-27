@@ -27,6 +27,7 @@
             if (!(parameter is ViewModelBase vm))
                 return;
 
+            vm.IsChanged = false;
             switch (vm)
             {
                 case CircleViewModel circleVM:

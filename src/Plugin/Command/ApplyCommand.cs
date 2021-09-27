@@ -4,6 +4,11 @@
     using System.ComponentModel;
     using System.Windows.Input;
 
+    using ACADPlugin.ViewModel;
+
+    /// <summary>
+    /// Команда принятия изменений примитива.
+    /// </summary>
     public class ApplyCommand : ICommand
     {
         public bool CanExecute(object parameter)
@@ -18,6 +23,10 @@
 
         public void Execute(object parameter)
         {
+            if (!(parameter is ViewModelBase vm))
+                return;
+
+            vm.IsChanged = true;
         }
 
         public void RaiseCanExecuteChanged()
