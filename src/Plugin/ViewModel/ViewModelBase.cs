@@ -57,7 +57,7 @@
         /// Метод генерации события при изменении определенного свойства.
         /// </summary>
         [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             ApplyCommand.RaiseCanExecuteChanged();

@@ -1,5 +1,8 @@
 ﻿namespace ACADPlugin.Model
 {
+    using ACADPlugin.Extensions;
+    using ACADPlugin.ViewModel;
+
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
 
@@ -25,7 +28,7 @@
         /// <summary>
         /// Координаты центра окружности.
         /// </summary>
-        public Point3d Center { get; set; }
+        public Point3d Center { get; private set; }
 
         /// <summary>
         /// Ссылка на объект чертежа.
@@ -35,7 +38,20 @@
         /// <summary>
         /// Радиус окружности.
         /// </summary>
-        public double Radius { get; set; }
+        public double Radius { get; private set; }
+
+        /// <summary>
+        /// Принять изменения.
+        /// </summary>
+        /// <param name="vm"> Вью-модель окружности.</param>
+        public void ApplyFrom(CircleViewModel vm)
+        {
+            IsChanged = vm.IsChanged;
+            Center = CreatePoint(vm.X, vm.Y, vm.Z);
+            Radius = vm.Radius.ToDouble();
+            base.SetInformation();
+            SetInformation();
+        }
 
         public override void Commit()
         {
@@ -43,15 +59,15 @@
             Circle.Center = Center;
         }
 
-        public sealed override void SetInformation()
-        {
-            Information =
-                $@"Радиус - {Radius.ToString(FORMAT, CultureInfo)}, Центр - {Center.ToString(FORMAT, CultureInfo)}";
-        }
-
         public sealed override void SetTypeName()
         {
             Type = "Окружность";
+        }
+
+        protected sealed override void SetInformation()
+        {
+            Information =
+                $@"Радиус - {Radius.ToString(FORMAT, CultureInfo)}, Центр - {Center.ToString(FORMAT, CultureInfo)}";
         }
     }
 }

@@ -110,6 +110,7 @@
     <Compile Include="Command\ApplyCommand.cs" />
     <Compile Include="Command\CommitCommand.cs" />
     <Compile Include="Command\RestoreCommand.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Model\CircleModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModel\CircleViewModel.cs" />
@@ -130,7 +131,6 @@
     <Compile Include="Model\PointModel.cs" />
     <Compile Include="Model\LineModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utilities\StringToPoint3dConverter.cs" />
     <Compile Include="View\EditCircleView.xaml.cs">
       <DependentUpon>EditCircleView.xaml</DependentUpon>
     </Compile>

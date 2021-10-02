@@ -2,6 +2,7 @@
 {
     using System;
     using System.ComponentModel;
+    using System.Linq;
 
     using ACADPlugin.Command;
     using ACADPlugin.Model;
@@ -14,6 +15,8 @@
     /// </summary>
     public class LayerViewModel : ViewModelBase, IDataErrorInfo
     {
+        private const string UN_ALLOWED_CHARACTERS = @"<>/\“:;?*|=‘";
+
         /// <summary>
         /// Поле свойства <see cref="LayerColor"/>.
         /// </summary>
@@ -107,14 +110,14 @@
         }
 
         /// <summary>
-        /// Заголовок окна.
-        /// </summary>
-        public static string WindowTitle => "Слой";
-
-        /// <summary>
         /// Наименование атрибута <see cref="Visibility"/>.
         /// </summary>
         public static string VisibilityTitle => "Видимость слоя";
+
+        /// <summary>
+        /// Заголовок окна.
+        /// </summary>
+        public static string WindowTitle => "Слой";
 
         public string Error => this[nameof(Name)];
 
@@ -128,7 +131,12 @@
                 {
                     case nameof(Name):
                         if (string.IsNullOrEmpty(Name) || string.IsNullOrWhiteSpace(Name))
-                            error = $@"Поле '{NameTitle}' не должно быть пустым";
+                            error = $@"Поле '{NameTitle}' не должно быть пустым!";
+                        else if (Name.Length >= 255)
+                            error = $@"В поле '{NameTitle}' превышено максимальное число символов!";
+                        else if (UN_ALLOWED_CHARACTERS.Any(character => Name.Contains(character)))
+                            error = $@"В поле '{NameTitle}' находятся недопустимые символы!";
+
                         break;
                 }
 

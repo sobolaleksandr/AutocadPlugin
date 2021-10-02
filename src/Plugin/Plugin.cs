@@ -55,13 +55,11 @@
                         DataContext = drawing
                     };
 
-                    if (DialogUtilities.ShowDialog(window) == true)
-                    {
-                        CommitDrawingChanges(drawing);
-                        transaction.Commit();
-                    }
+                    if (DialogUtilities.ShowDialog(window) != true)
+                        return;
 
-                    LockLayers(database);
+                    CommitDrawingChanges(drawing);
+                    transaction.Commit();
                 }
             }
             catch (Exception exception)
@@ -76,8 +74,7 @@
         /// <param name="drawing"> Модель чертежа. </param>
         private static void CommitDrawingChanges(DrawingModel drawing)
         {
-            var changedLayers = drawing.Layers.Where(layer => layer.IsChanged).ToList();
-            foreach (var layer in changedLayers)
+            foreach (var layer in drawing.Layers)
             {
                 layer.Commit();
             }
@@ -144,11 +141,20 @@
         {
             var layers = new List<LayerModel>();
             var layerIds = GetLayerIds(database);
+
             foreach (var layerId in layerIds)
             {
-                var layerTableRecord = LockLayer(transaction, false, layerId);
-                if (layerTableRecord != null)
-                    layers.Add(new LayerModel(layerTableRecord));
+                try
+                {
+                    var layerTableRecord = (LayerTableRecord)transaction.GetObject(layerId, OpenMode.ForWrite);
+                    var wasLocked = layerTableRecord.IsLocked;
+                    layerTableRecord.IsLocked = false;
+                    layers.Add(new LayerModel(layerTableRecord, wasLocked));
+                }
+                catch (Exception)
+                {
+                    // Во время отладки здесь возникали ошибки ACAD.
+                }
             }
 
             return layers;
@@ -178,45 +184,6 @@
             {
                 var layerTable = GetCurrentLayerTable(database, transaction);
                 return layerTable.OfType<ObjectId>().ToList();
-            }
-        }
-
-        /// <summary>
-        /// Блокировать/разблокировать слой.
-        /// </summary>
-        /// <param name="transaction"> Транзакция. </param>
-        /// <param name="isLocked"> Заблокировать/разблокировать слой. </param>
-        /// <param name="layerId"> Id-слоя. </param>
-        /// <returns> Возвращает заблокированный/разблокированный слой если плучилось заблокировать/разблокировать. </returns>
-        private static LayerTableRecord LockLayer(Transaction transaction, bool isLocked, ObjectId layerId)
-        {
-            try
-            {
-                var layerTableRecord = (LayerTableRecord)transaction.GetObject(layerId, OpenMode.ForWrite);
-                layerTableRecord.IsLocked = isLocked;
-                return layerTableRecord;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Блокирует все слои.
-        /// </summary>
-        /// <param name="database"> База чертежа. </param>
-        private static void LockLayers(Database database)
-        {
-            using (var transaction = database.StartTransaction())
-            {
-                var layerIds = GetLayerIds(database);
-                foreach (var layerId in layerIds)
-                {
-                    LockLayer(transaction, true, layerId);
-                }
-
-                transaction.Commit();
             }
         }
     }

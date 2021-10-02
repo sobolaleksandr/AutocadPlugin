@@ -3,6 +3,8 @@
     using System.Collections.Generic;
     using System.Windows.Media;
 
+    using ACADPlugin.ViewModel;
+
     using Autodesk.AutoCAD.DatabaseServices;
 
     using Color = Autodesk.AutoCAD.Colors.Color;
@@ -21,8 +23,10 @@
         /// Модель слоя.
         /// </summary>
         /// <param name="layer"> Слой. </param>
-        public LayerModel(LayerTableRecord layer)
+        /// <param name="wasLocked"> Был ли слой заблокирован до операции. </param>
+        public LayerModel(LayerTableRecord layer, bool wasLocked)
         {
+            WasLocked = wasLocked;
             Layer = layer;
             Color = layer.Color;
             Name = layer.Name;
@@ -46,7 +50,7 @@
         /// <summary>
         /// Цвет слоя.
         /// </summary>
-        public Color Color { get; set; }
+        public Color Color { get; private set; }
 
         /// <summary>
         /// Примитивы в слое.
@@ -66,12 +70,17 @@
         /// <summary>
         /// Наименование слоя
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; private set; }
 
         /// <summary>
         /// Видимость слоя.
         /// </summary>
-        public bool Visibility { get; set; }
+        public bool Visibility { get; private set; }
+
+        /// <summary>
+        /// Был ли слой заблокирован до начала операции.
+        /// </summary>
+        private bool WasLocked { get; }
 
         /// <summary>
         /// Добавить примитив в список объектов слоя.
@@ -86,15 +95,26 @@
                 Geometries = new List<GeometryModel> { geometry };
         }
 
+        /// <summary>
+        /// Принять изменения.
+        /// </summary>
+        /// <param name="vm"> Вью-модель отрезка.</param>
+        public void ApplyFrom(LayerViewModel vm)
+        {
+            IsChanged = vm.IsChanged;
+            Visibility = vm.Visibility;
+            Name = vm.Name;
+            Color = vm.LayerColor;
+            base.SetInformation();
+            SetTypeName();
+        }
+
         public override void Commit()
         {
+            Layer.IsLocked = WasLocked;
             Layer.Name = Name;
             Layer.Color = Color;
             Layer.IsOff = !Visibility;
-        }
-
-        public override void SetInformation()
-        {
         }
 
         public override void SetTypeName()
@@ -108,6 +128,10 @@
             var cadColor = Color.ColorValue;
             var color = System.Windows.Media.Color.FromRgb(cadColor.R, cadColor.G, cadColor.B);
             Brush = new SolidColorBrush(color);
+        }
+
+        protected override void SetInformation()
+        {
         }
     }
 }

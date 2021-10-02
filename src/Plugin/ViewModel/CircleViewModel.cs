@@ -151,7 +151,7 @@
                         if (string.IsNullOrWhiteSpace(error))
                         {
                             var radius = double.Parse(Radius);
-                            if (radius < 0)
+                            if (radius <= 0)
                                 error = $@"В поле '{TitleRadius}' число должно быть больше нуля!";
                         }
 
