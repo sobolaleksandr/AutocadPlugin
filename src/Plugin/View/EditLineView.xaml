@@ -64,7 +64,7 @@
             <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource TextBoxStyle}"
                      Validation.ErrorTemplate="{StaticResource ValidationFailed}">
                 <TextBox.Text>
-                    <Binding Path="StartX" Mode="TwoWay">
+                    <Binding Path="StartX" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
                             <DataErrorValidationRule />
                         </Binding.ValidationRules>
@@ -77,7 +77,7 @@
             <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource TextBoxStyle}"
                      Validation.ErrorTemplate="{StaticResource ValidationFailed}">
                 <TextBox.Text>
-                    <Binding Path="StartY" Mode="TwoWay">
+                    <Binding Path="StartY" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
                             <DataErrorValidationRule />
                         </Binding.ValidationRules>
@@ -88,7 +88,7 @@
             <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource TextBoxStyle}"
                      Validation.ErrorTemplate="{StaticResource ValidationFailed}">
                 <TextBox.Text>
-                    <Binding Path="EndX" Mode="TwoWay">
+                    <Binding Path="EndX" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
                             <DataErrorValidationRule />
                         </Binding.ValidationRules>
@@ -99,7 +99,7 @@
             <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource TextBoxStyle}"
                      Validation.ErrorTemplate="{StaticResource ValidationFailed}">
                 <TextBox.Text>
-                    <Binding Path="EndY" Mode="TwoWay">
+                    <Binding Path="EndY" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
                             <DataErrorValidationRule />
                         </Binding.ValidationRules>
@@ -110,7 +110,7 @@
             <TextBox Grid.Row="4" Grid.Column="1" Style="{StaticResource TextBoxStyle}"
                      Validation.ErrorTemplate="{StaticResource ValidationFailed}">
                 <TextBox.Text>
-                    <Binding Path="Height" Mode="TwoWay">
+                    <Binding Path="Height" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
                             <DataErrorValidationRule />
                         </Binding.ValidationRules>

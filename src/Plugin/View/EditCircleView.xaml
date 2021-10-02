@@ -64,7 +64,7 @@
             <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource TextBoxStyle}"
                      Validation.ErrorTemplate="{StaticResource ValidationFailed}">
                 <TextBox.Text>
-                    <Binding Path="X" Mode="TwoWay">
+                    <Binding Path="X" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
                             <DataErrorValidationRule />
                         </Binding.ValidationRules>
@@ -77,7 +77,7 @@
             <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource TextBoxStyle}"
                      Validation.ErrorTemplate="{StaticResource ValidationFailed}">
                 <TextBox.Text>
-                    <Binding Path="Y" Mode="TwoWay">
+                    <Binding Path="Y" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
                             <DataErrorValidationRule />
                         </Binding.ValidationRules>
@@ -88,7 +88,7 @@
             <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource TextBoxStyle}"
                      Validation.ErrorTemplate="{StaticResource ValidationFailed}">
                 <TextBox.Text>
-                    <Binding Path="Z" Mode="TwoWay">
+                    <Binding Path="Z" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
                             <DataErrorValidationRule />
                         </Binding.ValidationRules>
@@ -99,7 +99,7 @@
             <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource TextBoxStyle}"
                      Validation.ErrorTemplate="{StaticResource ValidationFailed}">
                 <TextBox.Text>
-                    <Binding Path="Radius" Mode="TwoWay">
+                    <Binding Path="Radius" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
                             <DataErrorValidationRule />
                         </Binding.ValidationRules>

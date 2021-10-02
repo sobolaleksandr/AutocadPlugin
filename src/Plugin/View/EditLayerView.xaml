@@ -70,7 +70,7 @@
                      IsEnabled="{Binding IsEditable}"
                      Validation.ErrorTemplate="{StaticResource ValidationFailed}">
                 <TextBox.Text>
-                    <Binding Path="Name" Mode="TwoWay">
+                    <Binding Path="Name" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
                             <DataErrorValidationRule />
                         </Binding.ValidationRules>
