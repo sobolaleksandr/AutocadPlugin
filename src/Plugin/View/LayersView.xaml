@@ -9,13 +9,11 @@
         Title="{Binding WindowTitle}"
         d:DataContext="{d:DesignInstance model:DrawingModel}" Height="500" Width="560">
     <Window.Resources>
-        <Style x:Key="ButtonStyle" TargetType="Button">
-            <Setter Property="Height" Value="25" />
-            <Setter Property="Margin" Value="5" />
-            <Setter Property="Padding" Value="15,0,15,0" />
-            <Setter Property="HorizontalAlignment" Value="Left" />
-        </Style>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="EditViewStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -42,8 +40,7 @@
                                     Content="Изменено" VerticalAlignment="Center" />
                             </StackPanel>
 
-                            <Button Style="{StaticResource ButtonStyle}"
-                                    Content="Редактировать"
+                            <Button Content="Редактировать"
                                     Command="{Binding EditCommand}"
                                     CommandParameter="{Binding}"
                                     Width="120" />
@@ -62,8 +59,7 @@
                                                             Visibility="{Binding IsChanged, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}"
                                                             Content="Изменено" VerticalAlignment="Center" />
 
-                                                        <Button Style="{StaticResource ButtonStyle}"
-                                                                Content="Редактировать"
+                                                        <Button Content="Редактировать"
                                                                 Command="{Binding EditCommand}"
                                                                 CommandParameter="{Binding}"
                                                                 Width="120" />
@@ -74,19 +70,17 @@
                                     </HierarchicalDataTemplate>
                                 </TreeViewItem.ItemTemplate>
                             </TreeViewItem>
-
                         </StackPanel>
-
                     </HierarchicalDataTemplate>
                 </TreeViewItem.ItemTemplate>
             </TreeViewItem>
         </TreeView>
         <Border Grid.Row="1" Grid.Column="0" BorderBrush="Gray" Background="LightGray" BorderThickness="2">
             <StackPanel Height="Auto" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Style="{StaticResource ButtonStyle}" Content="Применить изменения"
+                <Button Content="Применить изменения"
                         Command="{Binding CommitCommand}"
                         view:DialogResultButton.DialogResult="True" />
-                <Button Style="{StaticResource ButtonStyle}" Content="Отменить"
+                <Button Content="Отменить"
                         view:DialogResultButton.DialogResult="False" />
             </StackPanel>
         </Border>
